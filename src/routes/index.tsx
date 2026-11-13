@@ -103,17 +103,6 @@ function HeroSlides() {
         />
       ))}
       <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.18_0.03_262)]/95 via-[oklch(0.18_0.03_262)]/80 to-[oklch(0.18_0.03_262)]/45" />
-      <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
-        {SLIDES.map((f, i) => (
-          <button
-            key={f}
-            type="button"
-            aria-label={`Show photo ${i + 1}`}
-            onClick={() => setActive(i)}
-            className={`h-2 rounded-full transition-all ${i === active ? "w-6 bg-white" : "w-2 bg-white/50"}`}
-          />
-        ))}
-      </div>
     </>
   );
 }
@@ -151,11 +140,7 @@ function Index() {
       <section className="relative isolate overflow-hidden bg-[oklch(0.18_0.03_262)]">
         <HeroSlides />
         <div className="relative mx-auto flex min-h-[620px] max-w-6xl flex-col justify-center px-5 py-20 md:min-h-[680px]">
-          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
-            <span className="h-px w-8 bg-highlight" />
-            Corporate training · Dubai
-          </p>
-          <h1 className="mt-5 max-w-3xl font-display text-4xl leading-tight text-white md:text-6xl">{headline}</h1>
+          <h1 className="max-w-3xl font-display text-4xl leading-tight text-white md:text-6xl">{headline}</h1>
           <p className="mt-6 max-w-2xl text-lg text-white/85">
             Many companies have paid for training that did not match what was promised. At SPS we start with a training needs analysis, deliver practical sessions your staff can use at work, and measure the results after.
           </p>
@@ -185,12 +170,15 @@ function Index() {
               Chat on WhatsApp
             </a>
           </div>
-          <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-white">
-            <Stars />
-            <span>
-              {GOOGLE_RATING} on Google from {GOOGLE_REVIEWS} reviews
-            </span>
-          </div>
+          <figure className="mt-9 max-w-xl rounded-2xl border border-white/20 bg-white/10 p-5 text-white backdrop-blur-sm">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Stars />
+              <span>
+                {GOOGLE_RATING} on Google from {GOOGLE_REVIEWS} reviews
+              </span>
+            </div>
+            <blockquote className="mt-3 text-white/85">"{TESTIMONIALS[0]}"</blockquote>
+          </figure>
         </div>
       </section>
 
