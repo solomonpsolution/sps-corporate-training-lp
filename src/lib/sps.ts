@@ -28,7 +28,7 @@ export const TOPIC_OPTIONS = [...TOPICS, "Not sure yet"];
 export const COMPANY_SIZES = ["1 to 50", "51 to 200", "201 to 500", "501 to 1,000", "1,000+"];
 
 export const HEADLINES: Record<string, string> = {
-  leadership: "Leadership and management training for your team in Dubai",
+  leadership: "When leadership slips, results follow. Training built for your managers in Dubai",
   sales: "Sales and customer service training that lifts team performance",
   hr: "Train the trainer and training needs analysis for HR and L&D teams",
 };
