@@ -11,6 +11,21 @@ const GOOGLE_RATING = "4.9";
 const GOOGLE_REVIEWS = "462";
 const SLIDES = ["SPS-2.png", "SPS-1.png", "SPS-3.png"] as const;
 
+// Figures published on the SPS founder page (solomonpeoplesolutions.com/founder).
+const NUMBERS = [
+  ["30+", "Years of experience"],
+  ["5,000+", "Leaders and professionals developed"],
+  ["500+", "Consulting and learning engagements"],
+  ["15+", "Countries served"],
+] as const;
+
+const CREDENTIALS = [
+  "Advisor for the Investors in People (IIP) Award, UK",
+  "Certified Trainer, John Adair's Action Centred Leadership, UK",
+  "Certified Tutor for Institute of Leadership & Management courses, UK",
+  "Certified Predictive Index Analyst, USA",
+] as const;
+
 const FAQS = [
   ["How long are the programmes?", "Programme length depends on your goals. We recommend the right format for your team in the proposal."],
   ["What do we receive before we commit?", "A tailored proposal with the course outline, materials, schedule and cost, so you know exactly what your team will get."],
@@ -40,7 +55,6 @@ const WHY = [
   "Confirmed dates and timely communication at every step",
   "Support for your team during and after the training",
   "20 years training UAE teams (2006 to 2026)",
-  "Led by founder Solomon Vijayanand, 30 years in HR and training",
   "CPD accredited Train the Trainer and Certified Training Function Manager",
 ] as const;
 
@@ -119,10 +133,40 @@ function Index() {
     if (t && URL_TOPIC_TO_FORM[t.toLowerCase()]) setTopic(URL_TOPIC_TO_FORM[t.toLowerCase()] ?? "");
   }, []);
 
+  const [exitOpen, setExitOpen] = useState(false);
+
+  const markEngaged = () => {
+    try {
+      sessionStorage.setItem("sps_exit_shown", "1");
+    } catch {}
+  };
+
   const openForm = (t?: string) => {
     if (t) setTopic(t);
+    markEngaged();
     setOpen(true);
   };
+
+  // Exit popup: laptop and desktop only, once per visit, after 5 seconds on the page.
+  useEffect(() => {
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    let armed = false;
+    const timer = setTimeout(() => (armed = true), 5000);
+    const onLeave = (e: MouseEvent) => {
+      if (!armed || e.relatedTarget || e.clientY > 0) return;
+      try {
+        if (sessionStorage.getItem("sps_exit_shown")) return;
+        sessionStorage.setItem("sps_exit_shown", "1");
+      } catch {}
+      document.removeEventListener("mouseout", onLeave);
+      setExitOpen(true);
+    };
+    document.addEventListener("mouseout", onLeave);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("mouseout", onLeave);
+    };
+  }, []);
 
   return (
     <div className="bg-background text-foreground">
@@ -182,6 +226,19 @@ function Index() {
         </div>
       </section>
 
+      {/* Numbers */}
+      <section className="border-b border-border bg-card">
+        <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 px-5 py-10 md:grid-cols-4">
+          {NUMBERS.map(([n, label]) => (
+            <div key={label} className="px-2 text-center">
+              <dt className="sr-only">{label}</dt>
+              <dd className="font-display text-3xl text-primary md:text-4xl">{n}</dd>
+              <dd className="mt-1 text-sm text-muted-foreground">{label}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
       {/* Programmes */}
       <section className="mx-auto max-w-6xl px-5 py-20" style={{ contentVisibility: "auto" }}>
         <h2 className="font-display text-3xl md:text-4xl">Programmes</h2>
@@ -203,6 +260,36 @@ function Index() {
               </button>
             </article>
           ))}
+        </div>
+      </section>
+
+      {/* Founder credibility */}
+      <section className="bg-[oklch(0.18_0.03_262)] py-20 text-white" style={{ contentVisibility: "auto" }}>
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 md:grid-cols-2">
+          <div>
+            <h2 className="font-display text-3xl md:text-4xl">Led by Solomon Vijayanand</h2>
+            <p className="mt-3 text-lg text-highlight">Founder and Managing Director, 30+ years in HR and training</p>
+            <p className="mt-6 text-white/85">
+              Solomon has spent more than three decades in HR consulting, organisational development and professional training, with work across the GCC, Asia, Africa and North America. His career includes Titan Watches, The Birla Group, BPL and Toyota Kirloskar. He founded SPS in Dubai in 2006.
+            </p>
+            <ul className="mt-6 space-y-2 text-white/85">
+              {CREDENTIALS.map((c) => (
+                <li key={c} className="flex gap-2">
+                  <Check className="mt-1 h-4 w-4 shrink-0 text-highlight" />
+                  {c}
+                </li>
+              ))}
+            </ul>
+            <a
+              href="https://www.solomonpeoplesolutions.com/founder"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 inline-block rounded-full border-2 border-white/80 px-6 py-3 font-semibold text-white hover:bg-white hover:text-foreground"
+            >
+              Read his full profile
+            </a>
+          </div>
+          <img src="/corporate-training-lp/SPS-1.png" alt="Solomon People Solutions certificate presentation" loading="lazy" className="w-full rounded-2xl object-cover shadow-2xl" />
         </div>
       </section>
 
@@ -299,6 +386,33 @@ function Index() {
         <DialogContent className="max-h-[92vh] max-w-lg overflow-y-auto border-0 bg-transparent p-0 shadow-none">
           <DialogTitle className="sr-only">Request a training proposal</DialogTitle>
           <LeadForm topic={topic} id="proposal-form-popup" />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={exitOpen} onOpenChange={setExitOpen}>
+        <DialogContent className="max-w-md rounded-2xl border-0 bg-card p-8 text-center">
+          <DialogTitle className="font-display text-2xl font-normal text-foreground">Before you go</DialogTitle>
+          <p className="text-muted-foreground">
+            Get a tailored training proposal for your team. Tell us what you need and we reply within minutes during working hours.
+          </p>
+          <div className="mt-2 flex items-center justify-center gap-2 text-sm font-semibold">
+            <Stars />
+            <span>
+              {GOOGLE_RATING} on Google from {GOOGLE_REVIEWS} reviews
+            </span>
+          </div>
+          <button
+            onClick={() => {
+              setExitOpen(false);
+              openForm();
+            }}
+            className="mt-4 w-full rounded-full bg-primary px-6 py-3.5 font-semibold text-primary-foreground hover:bg-primary/90"
+          >
+            Yes, send me a proposal
+          </button>
+          <button onClick={() => setExitOpen(false)} className="text-sm text-muted-foreground underline hover:text-foreground">
+            No thanks
+          </button>
         </DialogContent>
       </Dialog>
 
