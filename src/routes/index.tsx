@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Star } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -121,6 +121,41 @@ function HeroSlides() {
   );
 }
 
+/** Counts up to a figure like "5,000+" the first time it scrolls into view. */
+function CountUp({ value }: { value: string }) {
+  const target = Number(value.replace(/[^0-9]/g, ""));
+  const suffix = value.replace(/[0-9,]/g, "");
+  const [shown, setShown] = useState(value);
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !target || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        obs.disconnect();
+        const start = performance.now();
+        const tick = (now: number) => {
+          const t = Math.min(1, (now - start) / 1600);
+          const eased = 1 - Math.pow(1 - t, 3);
+          setShown(Math.round(target * eased).toLocaleString("en-US") + suffix);
+          if (t < 1) raf = requestAnimationFrame(tick);
+        };
+        setShown("0" + suffix);
+        raf = requestAnimationFrame(tick);
+      },
+      { threshold: 0.4 },
+    );
+    obs.observe(el);
+    return () => {
+      obs.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [target, suffix]);
+  return <span ref={ref}>{shown}</span>;
+}
+
 function Index() {
   const [headline, setHeadline] = useState(DEFAULT_HEADLINE);
   const [topic, setTopic] = useState("");
@@ -226,17 +261,27 @@ function Index() {
         </div>
       </section>
 
-      {/* Numbers */}
-      <section className="border-b border-border bg-card">
-        <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 px-5 py-10 md:grid-cols-4">
-          {NUMBERS.map(([n, label]) => (
-            <div key={label} className="px-2 text-center">
-              <dt className="sr-only">{label}</dt>
-              <dd className="font-display text-3xl text-primary md:text-4xl">{n}</dd>
-              <dd className="mt-1 text-sm text-muted-foreground">{label}</dd>
-            </div>
-          ))}
-        </dl>
+      {/* Our experience in numbers */}
+      <section className="relative isolate overflow-hidden py-20 text-white" style={{ contentVisibility: "auto" }}>
+        <img src="/corporate-training-lp/SPS-3.png" alt="" aria-hidden loading="lazy" className="absolute inset-0 -z-10 h-full w-full object-cover" />
+        <div className="absolute inset-0 -z-10 bg-[oklch(0.15_0.03_262)]/80" />
+        <div className="mx-auto max-w-6xl px-5 text-center">
+          <h2 className="font-display text-3xl md:text-4xl">Our experience in numbers</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-white/85">
+            Since 2006, SPS has helped organisations across the Middle East, Africa and Asia build stronger leaders and teams.
+          </p>
+          <dl className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-4">
+            {NUMBERS.map(([n, label]) => (
+              <div key={label} className="px-2">
+                <dt className="sr-only">{label}</dt>
+                <dd className="font-sans text-4xl font-extrabold tracking-tight text-highlight md:text-6xl">
+                  <CountUp value={n} />
+                </dd>
+                <dd className="mt-2 text-sm text-white/85 md:text-base">{label}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
 
       {/* Programmes */}
