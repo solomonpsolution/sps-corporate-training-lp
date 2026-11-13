@@ -262,22 +262,20 @@ function Index() {
       </section>
 
       {/* Our experience in numbers */}
-      <section className="relative isolate overflow-hidden py-20 text-white" style={{ contentVisibility: "auto" }}>
-        <img src="/corporate-training-lp/SPS-3.png" alt="" aria-hidden loading="lazy" className="absolute inset-0 -z-10 h-full w-full object-cover" />
-        <div className="absolute inset-0 -z-10 bg-[oklch(0.15_0.03_262)]/80" />
+      <section className="border-b border-border bg-card py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-6xl px-5 text-center">
           <h2 className="font-display text-3xl md:text-4xl">Our experience in numbers</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-white/85">
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
             Since 2006, SPS has helped organisations across the Middle East, Africa and Asia build stronger leaders and teams.
           </p>
           <dl className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-4">
             {NUMBERS.map(([n, label]) => (
               <div key={label} className="px-2">
                 <dt className="sr-only">{label}</dt>
-                <dd className="font-sans text-4xl font-extrabold tracking-tight text-highlight md:text-6xl">
+                <dd className="font-sans text-4xl font-extrabold tracking-tight text-primary md:text-6xl">
                   <CountUp value={n} />
                 </dd>
-                <dd className="mt-2 text-sm text-white/85 md:text-base">{label}</dd>
+                <dd className="mt-2 text-sm text-muted-foreground md:text-base">{label}</dd>
               </div>
             ))}
           </dl>
