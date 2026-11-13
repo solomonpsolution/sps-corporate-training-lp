@@ -1,13 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Check, Star } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { LeadForm } from "@/components/sps/LeadForm";
-import { Logo, PhoneLink, WhatsAppButton } from "@/components/sps/Shared";
-import { ADDRESS, DEFAULT_HEADLINE, TOPICS, URL_TOPIC_TO_FORM, captureAttribution, headlineFor, noindexMeta } from "@/lib/sps";
+import { Logo, PhoneLink, WhatsAppButton, WhatsAppIcon } from "@/components/sps/Shared";
+import { ADDRESS, DEFAULT_HEADLINE, GOOGLE_ADS_WHATSAPP_LABEL, TOPICS, URL_TOPIC_TO_FORM, WHATSAPP_URL, adsConversion, captureAttribution, headlineFor, noindexMeta, pushEvent } from "@/lib/sps";
 
 const GOOGLE_RATING = "4.9";
 const GOOGLE_REVIEWS = "462";
+const SLIDES = ["SPS-2.png", "SPS-1.png", "SPS-3.png"] as const;
 
 const FAQS = [
   ["How long are the programmes?", "Programme length depends on your goals. We recommend the right format for your team in the proposal."],
@@ -71,10 +73,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function scrollToForm() {
-  document.getElementById("proposal-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 function Stars() {
   return (
     <span className="flex text-highlight" aria-hidden>
@@ -85,9 +83,45 @@ function Stars() {
   );
 }
 
+function HeroSlides() {
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setActive((a) => (a + 1) % SLIDES.length), 5000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <>
+      {SLIDES.map((f, i) => (
+        <img
+          key={f}
+          src={`/corporate-training-lp/${f}`}
+          alt=""
+          aria-hidden
+          fetchPriority={i === 0 ? "high" : "low"}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${i === active ? "opacity-100" : "opacity-0"}`}
+        />
+      ))}
+      <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.18_0.03_262)]/95 via-[oklch(0.18_0.03_262)]/80 to-[oklch(0.18_0.03_262)]/45" />
+      <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
+        {SLIDES.map((f, i) => (
+          <button
+            key={f}
+            type="button"
+            aria-label={`Show photo ${i + 1}`}
+            onClick={() => setActive(i)}
+            className={`h-2 rounded-full transition-all ${i === active ? "w-6 bg-white" : "w-2 bg-white/50"}`}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
+
 function Index() {
   const [headline, setHeadline] = useState(DEFAULT_HEADLINE);
   const [topic, setTopic] = useState("");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     captureAttribution();
@@ -96,57 +130,70 @@ function Index() {
     if (t && URL_TOPIC_TO_FORM[t.toLowerCase()]) setTopic(URL_TOPIC_TO_FORM[t.toLowerCase()] ?? "");
   }, []);
 
-  const pick = (t: string) => {
-    setTopic(t);
-    scrollToForm();
+  const openForm = (t?: string) => {
+    if (t) setTopic(t);
+    setOpen(true);
   };
 
   return (
     <div className="bg-background text-foreground">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
         <Logo />
-        <PhoneLink className="text-sm font-semibold text-foreground hover:text-primary" />
+        <div className="flex items-center gap-5">
+          <PhoneLink className="hidden text-sm font-semibold text-foreground hover:text-primary sm:inline" />
+          <button onClick={() => openForm()} className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+            Get in touch
+          </button>
+        </div>
       </header>
 
-      {/* Hero */}
-      <section className="mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-6 md:grid-cols-[1.1fr_1fr] md:pt-12">
-        <div className="md:pt-6">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary">Corporate training · Dubai</p>
-          <h1 className="mt-4 font-display text-3xl leading-tight md:text-5xl">{headline}</h1>
-          <p className="mt-5 text-lg text-muted-foreground">
+      {/* Hero with sliding photos */}
+      <section className="relative isolate overflow-hidden bg-[oklch(0.18_0.03_262)]">
+        <HeroSlides />
+        <div className="relative mx-auto flex min-h-[620px] max-w-6xl flex-col justify-center px-5 py-20 md:min-h-[680px]">
+          <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
+            <span className="h-px w-8 bg-highlight" />
+            Corporate training · Dubai
+          </p>
+          <h1 className="mt-5 max-w-3xl font-display text-4xl leading-tight text-white md:text-6xl">{headline}</h1>
+          <p className="mt-6 max-w-2xl text-lg text-white/85">
             Many companies have paid for training that did not match what was promised. At SPS we start with a training needs analysis, deliver practical sessions your staff can use at work, and measure the results after.
           </p>
-          <ul className="mt-7 space-y-3">
-            {["Training needs analysis first", "Practical sessions, not just theory", "We reply within minutes"].map((c) => (
-              <li key={c} className="flex items-center gap-3 font-medium">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-highlight/30 text-primary">
-                  <Check className="h-4 w-4" />
-                </span>
+          <ul className="mt-7 flex flex-col gap-3 text-white sm:flex-row sm:gap-7">
+            {["Training needs analysis first", "Practical, not just theory", "We reply within minutes"].map((c) => (
+              <li key={c} className="flex items-center gap-2 font-medium">
+                <Check className="h-5 w-5 text-highlight" />
                 {c}
               </li>
             ))}
           </ul>
-          <figure className="mt-8 rounded-2xl border border-border bg-card p-5">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <Stars />
-              <span>
-                {GOOGLE_RATING} on Google from {GOOGLE_REVIEWS} reviews
-              </span>
-            </div>
-            <blockquote className="mt-3 text-muted-foreground">"{TESTIMONIALS[0]}"</blockquote>
-          </figure>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <button onClick={() => openForm()} className="rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90">
+              Request a proposal
+            </button>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                pushEvent({ event: "whatsapp_click" });
+                adsConversion(GOOGLE_ADS_WHATSAPP_LABEL);
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/80 px-8 py-4 text-base font-semibold text-white hover:bg-white hover:text-foreground"
+            >
+              <WhatsAppIcon className="h-5 w-5" />
+              Chat on WhatsApp
+            </a>
+          </div>
+          <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-white">
+            <Stars />
+            <span>
+              {GOOGLE_RATING} on Google from {GOOGLE_REVIEWS} reviews
+            </span>
+          </div>
         </div>
-        <LeadForm topic={topic} />
       </section>
 
-    {/* Photos */}
-      <section className="mx-auto max-w-6xl px-5 pb-4">
-        <div className="grid gap-4 md:grid-cols-3">
-          {["SPS-1.png", "SPS-2.png", "SPS-3.png"].map((f) => (
-            <img key={f} src={`/corporate-training-lp/${f}`} alt="SPS corporate training session in Dubai" loading="lazy" className="aspect-[4/3] w-full rounded-2xl object-cover" />
-          ))}
-        </div>
-      </section>     
       {/* Programmes */}
       <section className="mx-auto max-w-6xl px-5 py-20" style={{ contentVisibility: "auto" }}>
         <h2 className="font-display text-3xl md:text-4xl">Programmes</h2>
@@ -163,7 +210,7 @@ function Index() {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => pick(p.title)} className="mt-6 self-start rounded-full border-2 border-primary px-5 py-2 font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground">
+              <button onClick={() => openForm(p.title)} className="mt-6 self-start rounded-full border-2 border-primary px-5 py-2 font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground">
                 Request a proposal
               </button>
             </article>
@@ -171,10 +218,11 @@ function Index() {
         </div>
       </section>
 
-      {/* How it works */}
+      {/* How we work */}
       <section className="bg-card py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-6xl px-5">
-          <h2 className="font-display text-3xl md:text-4xl">How it works</h2>
+          <h2 className="font-display text-3xl md:text-4xl">How we work</h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">Every programme starts with your real business needs, not a ready made course.</p>
           <ol className="mt-10 grid gap-6 md:grid-cols-5">
             {STEPS.map(([t, d], i) => (
               <li key={t} className="rounded-2xl bg-background p-6">
@@ -234,13 +282,21 @@ function Index() {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="bg-foreground py-20 text-background">
-        <div className="mx-auto max-w-3xl px-5 text-center">
-          <h2 className="font-display text-3xl md:text-4xl">Tell us what your team needs. We reply within minutes.</h2>
-          <button onClick={scrollToForm} className="mt-8 rounded-full bg-primary px-8 py-4 font-semibold text-primary-foreground hover:bg-primary/90">
-            Request my proposal
-          </button>
+      {/* Final section with the form on the page */}
+      <section className="bg-[oklch(0.18_0.03_262)] py-20">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-[1fr_1fr]">
+          <div className="text-white">
+            <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
+              <span className="h-px w-8 bg-highlight" />
+              Contact us
+            </p>
+            <h2 className="mt-4 font-display text-3xl leading-tight md:text-5xl">Tell us what your team needs.</h2>
+            <p className="mt-5 text-lg text-white/80">We design a training programme built around your goals and reply within minutes during working hours.</p>
+            <p className="mt-6 text-white/80">
+              Prefer to talk? Call <PhoneLink className="font-semibold text-white underline" />
+            </p>
+          </div>
+          <LeadForm topic={topic} />
         </div>
       </section>
 
@@ -250,6 +306,13 @@ function Index() {
         <p><PhoneLink className="hover:text-primary" /></p>
         <p><a href="/corporate-training-lp/privacy" className="underline hover:text-primary">Privacy policy</a></p>
       </footer>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-h-[92vh] max-w-lg overflow-y-auto border-0 bg-transparent p-0 shadow-none">
+          <DialogTitle className="sr-only">Request a training proposal</DialogTitle>
+          <LeadForm topic={topic} id="proposal-form-popup" />
+        </DialogContent>
+      </Dialog>
 
       <WhatsAppButton floating />
     </div>
