@@ -6,6 +6,7 @@ import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 
 export default defineConfig(({ command }) => ({
+    base: "/corporate-training-lp/",
   css: { transformer: "lightningcss" },
   resolve: {
     alias: { "@": `${process.cwd()}/src` },
@@ -19,7 +20,7 @@ export default defineConfig(({ command }) => ({
       server: { entry: "server" },
       importProtection: { behavior: "error", client: { files: ["**/server/**"], specifiers: ["server-only"] } },
     }),
-    ...(command === "build" ? [nitro()] : []),
+    ...(command === "build" ? [nitro({ baseURL: "/corporate-training-lp/" })] : []),
     viteReact(),
   ],
 }));
