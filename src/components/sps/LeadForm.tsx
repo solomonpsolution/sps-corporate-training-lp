@@ -25,7 +25,7 @@ type Values = typeof empty;
 const inputCls =
   "w-full rounded-lg border border-input bg-card px-3 py-2.5 text-[15px] text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20";
 
-export function LeadForm({ topic }: { topic: string }) {
+export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: string }) {
   const [v, setV] = useState<Values>(empty);
   const [errors, setErrors] = useState<Partial<Record<keyof Values, string>>>({});
   const [submitError, setSubmitError] = useState("");
@@ -96,7 +96,7 @@ export function LeadForm({ topic }: { topic: string }) {
   );
 
   return (
-    <form id="proposal-form" onSubmit={onSubmit} noValidate className="scroll-mt-6 rounded-2xl border border-border bg-card p-6 shadow-xl shadow-foreground/5 md:p-7">
+    <form id={id} onSubmit={onSubmit} noValidate className="scroll-mt-6 rounded-2xl border border-border bg-card p-6 shadow-xl shadow-foreground/5 md:p-7">
       <h2 className="font-display text-2xl text-foreground">Request a training proposal</h2>
       <div className="mt-5 space-y-4">
         {field("full_name", "Full name", <input className={inputCls} value={v.full_name} onChange={set("full_name")} autoComplete="name" />)}
