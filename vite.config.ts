@@ -18,6 +18,7 @@ export default defineConfig(({ command }) => ({
     tanstackStart({
       // Use src/server.ts (SSR error wrapper) as the server entry.
       server: { entry: "server" },
+      router: { basepath: "/" },
       importProtection: { behavior: "error", client: { files: ["**/server/**"], specifiers: ["server-only"] } },
     }),
     ...(command === "build" ? [nitro({ baseURL: "/corporate-training-lp/" })] : []),
