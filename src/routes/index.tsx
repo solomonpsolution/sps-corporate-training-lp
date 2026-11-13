@@ -238,7 +238,7 @@ function Index() {
         <p className="font-semibold text-foreground">Solomon People Solutions</p>
         <p>{ADDRESS}</p>
         <p><PhoneLink className="hover:text-primary" /></p>
-        <p><a href="/privacy" className="underline hover:text-primary">Privacy policy</a></p>
+        <p><a href="/corporate-training-lp/privacy" className="underline hover:text-primary">Privacy policy</a></p>
       </footer>
 
       <WhatsAppButton floating />
