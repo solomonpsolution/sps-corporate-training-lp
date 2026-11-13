@@ -32,7 +32,7 @@ export const HEADLINES: Record<string, string> = {
   sales: "Sales and customer service training that lifts team performance",
   hr: "Train the trainer and training needs analysis for HR and L&D teams",
 };
-export const DEFAULT_HEADLINE = "Corporate training built around your team, not a general course";
+export const DEFAULT_HEADLINE = "Corporate training built around your team";
 export const URL_TOPIC_TO_FORM: Record<string, string> = {
   leadership: TOPICS[0],
   sales: TOPICS[1],
