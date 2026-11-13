@@ -38,6 +38,8 @@ const WHY = [
   "Confirmed dates and timely communication at every step",
   "Support for your team during and after the training",
   "20 years training UAE teams (2006 to 2026)",
+  "Led by founder Solomon Vijayanand, 30 years in HR and training",
+  "CPD accredited Train the Trainer and Certified Training Function Manager",
 ] as const;
 
 const TESTIMONIALS = [
@@ -137,6 +139,14 @@ function Index() {
         <LeadForm topic={topic} />
       </section>
 
+    {/* Photos */}
+      <section className="mx-auto max-w-6xl px-5 pb-4">
+        <div className="grid gap-4 md:grid-cols-3">
+          {["SPS-1.png", "SPS-2.png", "SPS-3.png"].map((f) => (
+            <img key={f} src={`/corporate-training-lp/${f}`} alt="SPS corporate training session in Dubai" loading="lazy" className="aspect-[4/3] w-full rounded-2xl object-cover" />
+          ))}
+        </div>
+      </section>     
       {/* Programmes */}
       <section className="mx-auto max-w-6xl px-5 py-20" style={{ contentVisibility: "auto" }}>
         <h2 className="font-display text-3xl md:text-4xl">Programmes</h2>
