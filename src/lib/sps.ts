@@ -7,11 +7,11 @@ export const GOOGLE_ADS_LEAD_LABEL = "8SiyCMiNoLYdEIWevrkD"; // SPS NEW CT LP - 
 export const GOOGLE_ADS_WHATSAPP_LABEL = "qlVkCMuNoLYdEIWevrkD"; // SPS NEW CT LP - WHATSAPP CLICK (secondary)
 export const GOOGLE_ADS_PHONE_LABEL = "R-RcCM6NoLYdEIWevrkD"; // SPS NEW CT LP - PHONE CLICK (secondary)
 
-// Leads are emailed to LEAD_EMAIL through FormSubmit (formsubmit.co).
-// The first submission sends an activation email to LEAD_EMAIL; click it once.
-export const LEAD_EMAIL = "mercyget4@gmail.com";
-// Every lead is also copied to the SPS inbox.
-export const LEAD_CC = "info@solomonpeoplesolutions.com";
+// Leads are emailed to LEAD_EMAIL through FormSubmit (formsubmit.co), with a copy to LEAD_CC.
+// The first submission to a new LEAD_EMAIL sends an activation email to that inbox; click it once.
+// Until it is activated, leads fall back to LEAD_CC (already active) so no enquiry is lost.
+export const LEAD_EMAIL = "info@solomonpeoplesolutions.com";
+export const LEAD_CC = "mercyget4@gmail.com";
 export const ZOHO_BOOKINGS_URL = "https://PLACEHOLDER-zoho-bookings-link"; // PLACEHOLDER
 export const WHATSAPP_NUMBER = "971552815948";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -98,20 +98,29 @@ declare global {
     dataLayer?: Record<string, unknown>[];
   }
 }
-export async function sendLeadEmail(lead: Record<string, string>) {
-  const res = await fetch(`https://formsubmit.co/ajax/${LEAD_EMAIL}`, {
+async function postLead(to: string, cc: string, lead: Record<string, string>) {
+  const res = await fetch(`https://formsubmit.co/ajax/${to}`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
       _subject: `New training lead: ${lead["company"] ?? ""} (${lead["lead_quality"] ?? ""})`,
       _template: "table",
       _captcha: "false",
-      _cc: LEAD_CC,
+      _cc: cc,
       ...lead,
     }),
   });
   const json = (await res.json().catch(() => ({}))) as { success?: string | boolean; message?: string };
   if (!res.ok || String(json.success) !== "true") throw new Error(json.message || `status ${res.status}`);
+}
+
+export async function sendLeadEmail(lead: Record<string, string>) {
+  try {
+    await postLead(LEAD_EMAIL, LEAD_CC, lead);
+  } catch {
+    // Main inbox not activated yet or temporarily failing: send to the backup inbox instead.
+    await postLead(LEAD_CC, LEAD_EMAIL, lead);
+  }
 }
 
 /** Sends a Google Ads conversion for the given label, if the tag is loaded. */
