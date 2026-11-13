@@ -4,7 +4,7 @@ import { GOOGLE_ADS_LEAD_LABEL, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABE
 export function Logo() {
   return (
     <img
-      src="/sps-logo.png"
+      src="/corporate-training-lp/sps-logo.png"
       alt="Solomon People Solutions"
       width={159}
       height={54}
