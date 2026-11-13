@@ -56,7 +56,7 @@ export const Route = createFileRoute("/")({
       { title: "Corporate Training in Dubai | Solomon People Solutions" },
       { name: "description", content: "Corporate training built around your team: training needs analysis first, practical sessions by expert trainers, and measured results. Rated 4.9 on Google." },
       { property: "og:title", content: "Corporate Training in Dubai | Solomon People Solutions" },
-      { property: "og:description", content: "Corporate training built around your team, not a general course." },
+      { property: "og:description", content: "Corporate training built around your team. Rated 4.9 on Google." },
       ...noindexMeta,
     ],
     scripts: [
@@ -102,7 +102,7 @@ function HeroSlides() {
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${i === active ? "opacity-100" : "opacity-0"}`}
         />
       ))}
-      <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.18_0.03_262)]/95 via-[oklch(0.18_0.03_262)]/80 to-[oklch(0.18_0.03_262)]/45" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.15_0.03_262)]/85 via-[oklch(0.15_0.03_262)]/55 to-[oklch(0.15_0.03_262)]/10" />
     </>
   );
 }
@@ -140,12 +140,12 @@ function Index() {
       <section className="relative isolate overflow-hidden bg-[oklch(0.18_0.03_262)]">
         <HeroSlides />
         <div className="relative mx-auto flex min-h-[620px] max-w-6xl flex-col justify-center px-5 py-20 md:min-h-[680px]">
-          <h1 className="max-w-3xl font-display text-4xl leading-tight text-white md:text-6xl">{headline}</h1>
-          <p className="mt-6 max-w-2xl text-lg text-white/85">
-            Many companies have paid for training that did not match what was promised. At SPS we start with a training needs analysis, deliver practical sessions your staff can use at work, and measure the results after.
+          <h1 className="max-w-3xl font-display text-3xl leading-tight text-white [text-shadow:0_2px_12px_rgb(0_0_0/0.55)] md:text-5xl">{headline}</h1>
+          <p className="mt-6 max-w-2xl text-lg text-white/90 [text-shadow:0_1px_8px_rgb(0_0_0/0.6)]">
+            Many companies have paid for training that did not match what was promised. At SPS every programme is customised to your team, and it always starts with your real business needs. We measure the results after, so you can see what changed.
           </p>
           <ul className="mt-7 flex flex-col gap-3 text-white sm:flex-row sm:gap-7">
-            {["Training needs analysis first", "Practical, not just theory", "We reply within minutes"].map((c) => (
+            {["We assess your team's needs first", "Practical, not just theory", "We reply within minutes"].map((c) => (
               <li key={c} className="flex items-center gap-2 font-medium">
                 <Check className="h-5 w-5 text-highlight" />
                 {c}
