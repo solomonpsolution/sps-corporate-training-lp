@@ -10,6 +10,8 @@ export const GOOGLE_ADS_PHONE_LABEL = "R-RcCM6NoLYdEIWevrkD"; // SPS NEW CT LP -
 // Leads are emailed to LEAD_EMAIL through FormSubmit (formsubmit.co).
 // The first submission sends an activation email to LEAD_EMAIL; click it once.
 export const LEAD_EMAIL = "mercyget4@gmail.com";
+// Every lead is also copied to the SPS inbox.
+export const LEAD_CC = "info@solomonpeoplesolutions.com";
 export const ZOHO_BOOKINGS_URL = "https://PLACEHOLDER-zoho-bookings-link"; // PLACEHOLDER
 export const WHATSAPP_NUMBER = "971552815948";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -104,6 +106,7 @@ export async function sendLeadEmail(lead: Record<string, string>) {
       _subject: `New training lead: ${lead["company"] ?? ""} (${lead["lead_quality"] ?? ""})`,
       _template: "table",
       _captcha: "false",
+      _cc: LEAD_CC,
       ...lead,
     }),
   });
