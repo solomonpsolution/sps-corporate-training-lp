@@ -24,7 +24,7 @@ export const TOPICS = [
   "Leadership and Management",
   "Sales and Customer Service",
   "Communication and Soft Skills",
-  "Train the Trainer and Training Needs Analysis",
+  "Train the Trainer",
 ] as const;
 export const TOPIC_OPTIONS = [...TOPICS, "Not sure yet"];
 export const COMPANY_SIZES = ["1 to 50", "51 to 200", "201 to 500", "501 to 1,000", "1,000+"];
@@ -32,9 +32,9 @@ export const COMPANY_SIZES = ["1 to 50", "51 to 200", "201 to 500", "501 to 1,00
 export const HEADLINES: Record<string, string> = {
   leadership: "When leadership slips, results follow. Training built for your managers in Dubai",
   sales: "Sales and customer service training that lifts team performance",
-  hr: "Train the trainer and training needs analysis for HR and L&D teams",
+  hr: "CPD accredited Train the Trainer for HR and L&D teams in Dubai",
 };
-export const DEFAULT_HEADLINE = "Corporate training built around your team";
+export const DEFAULT_HEADLINE = "Corporate Training built around your team";
 export const URL_TOPIC_TO_FORM: Record<string, string> = {
   leadership: TOPICS[0],
   sales: TOPICS[1],
