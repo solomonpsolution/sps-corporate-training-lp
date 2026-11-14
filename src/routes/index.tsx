@@ -20,6 +20,7 @@ const NUMBERS = [
 ] as const;
 
 const CREDENTIALS = [
+  "CPD Certified Master Trainer for Trainers",
   "Advisor for the Investors in People (IIP) Award, UK",
   "Certified Trainer, John Adair's Action Centred Leadership, UK",
   "Certified Tutor for Institute of Leadership & Management courses, UK",
@@ -38,7 +39,7 @@ const PROGRAMMES = [
   { title: TOPICS[0], points: ["Lead and motivate teams with confidence", "Delegate, give feedback and coach", "Make decisions and manage priorities"] },
   { title: TOPICS[1], points: ["Understand customer needs and objections", "Build trust and close with structure", "Deliver consistent, standout service"] },
   { title: TOPICS[2], points: ["Communicate clearly in person and in writing", "Handle difficult conversations calmly", "Collaborate across teams and cultures"] },
-  { title: TOPICS[3], points: ["CPD accredited Train the Trainer certificate", "Run a structured training needs analysis", "Design and deliver engaging sessions"] },
+  { title: TOPICS[3], points: ["CPD accredited Train the Trainer certificate", "Present with confidence and handle difficult participants", "Design and deliver engaging sessions"] },
 ] as const;
 
 const STEPS = [
