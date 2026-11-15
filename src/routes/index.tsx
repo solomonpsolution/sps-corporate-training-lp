@@ -20,7 +20,7 @@ const NUMBERS = [
 ] as const;
 
 const CREDENTIALS = [
-  "CPD Certified Master Trainer for Trainers",
+  "CPD Certified Master Trainer for Trainers, UK",
   "Advisor for the Investors in People (IIP) Award, UK",
   "Certified Trainer, John Adair's Action Centred Leadership, UK",
   "Certified Tutor for Institute of Leadership & Management courses, UK",
