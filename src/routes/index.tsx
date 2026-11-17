@@ -355,7 +355,7 @@ function Index() {
       </section>
 
       {/* What participants say */}
-      <section className="mx-auto max-w-6xl px-5 py-20" style={{ contentVisibility: "auto" }}>
+      <section id="testimonials" className="mx-auto max-w-6xl scroll-mt-4 px-5 py-20" style={{ contentVisibility: "auto" }}>
         <h2 className="font-display text-3xl md:text-4xl">What participants say</h2>
         <p className="mt-3 flex items-center gap-2 text-muted-foreground">
           <Stars /> {GOOGLE_RATING} on Google from {GOOGLE_REVIEWS} reviews
