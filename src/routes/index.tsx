@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Check, Star } from "lucide-react";
+import { Check, Phone, Star } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { LeadForm } from "@/components/sps/LeadForm";
 import { Logo, PhoneLink, WhatsAppButton, WhatsAppIcon } from "@/components/sps/Shared";
 import { REVIEWS, type Review } from "@/lib/reviews";
-import { ADDRESS, DEFAULT_HEADLINE, GOOGLE_ADS_WHATSAPP_LABEL, TOPICS, URL_TOPIC_TO_FORM, WHATSAPP_URL, adsConversion, captureAttribution, headlineFor, noindexMeta, pushEvent } from "@/lib/sps";
+import { ADDRESS, DEFAULT_HEADLINE, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABEL, PHONE_TEL, TOPICS, URL_TOPIC_TO_FORM, WHATSAPP_URL, adsConversion, captureAttribution, headlineFor, noindexMeta, pushEvent } from "@/lib/sps";
 
 const GOOGLE_RATING = "4.9";
 const GOOGLE_REVIEWS = "462";
@@ -312,6 +312,18 @@ function Index() {
             >
               <WhatsAppIcon className="h-5 w-5" />
               Chat on WhatsApp
+            </a>
+            {/* Phones only: the header number is hidden below the sm breakpoint. */}
+            <a
+              href={PHONE_TEL}
+              onClick={() => {
+                pushEvent({ event: "phone_click" });
+                adsConversion(GOOGLE_ADS_PHONE_LABEL);
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/80 px-8 py-4 text-base font-semibold text-white hover:bg-white hover:text-foreground sm:hidden"
+            >
+              <Phone className="h-5 w-5" />
+              Call now
             </a>
           </div>
           <figure className="mt-9 max-w-xl rounded-2xl border border-white/20 bg-white/10 p-5 text-white backdrop-blur-sm">
