@@ -98,7 +98,7 @@ declare global {
     dataLayer?: Record<string, unknown>[];
   }
 }
-async function postLead(to: string, cc: string | null, lead: Record<string, string>) {
+async function postLead(to: string, cc: string, lead: Record<string, string>) {
   const res = await fetch(`https://formsubmit.co/ajax/${to}`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -106,7 +106,7 @@ async function postLead(to: string, cc: string | null, lead: Record<string, stri
       _subject: `New training lead: ${lead["company"] ?? ""} (${lead["lead_quality"] ?? ""})`,
       _template: "table",
       _captcha: "false",
-      ...(cc ? { _cc: cc } : {}),
+      _cc: cc,
       ...lead,
     }),
   });
@@ -114,10 +114,13 @@ async function postLead(to: string, cc: string | null, lead: Record<string, stri
   if (!res.ok || String(json.success) !== "true") throw new Error(json.message || `status ${res.status}`);
 }
 
-// TEST MODE: leads go only to LEAD_CC while the Google Ads conversion test runs.
-// To restore, send to LEAD_EMAIL with LEAD_CC as the copy (see git history).
 export async function sendLeadEmail(lead: Record<string, string>) {
-  await postLead(LEAD_CC, null, lead);
+  try {
+    await postLead(LEAD_EMAIL, LEAD_CC, lead);
+  } catch {
+    // Main inbox not activated yet or temporarily failing: send to the backup inbox instead.
+    await postLead(LEAD_CC, LEAD_EMAIL, lead);
+  }
 }
 
 /** Sends a Google Ads conversion for the given label, if the tag is loaded. */
