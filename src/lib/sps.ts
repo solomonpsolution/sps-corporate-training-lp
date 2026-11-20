@@ -102,6 +102,8 @@ async function postLead(to: string, cc: string, lead: Record<string, string>) {
   const res = await fetch(`https://formsubmit.co/ajax/${to}`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
+    // keepalive lets the request finish even if the visitor closes the tab.
+    keepalive: true,
     body: JSON.stringify({
       _subject: `New training lead: ${lead["company"] ?? ""} (${lead["lead_quality"] ?? ""})`,
       _template: "table",

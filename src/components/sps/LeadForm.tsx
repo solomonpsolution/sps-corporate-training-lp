@@ -22,6 +22,8 @@ const empty = {
 };
 type Values = typeof empty;
 
+const SEND_WAIT_MS = 4000;
+
 const inputCls =
   "w-full rounded-lg border border-input bg-card px-3 py-2.5 text-[15px] text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20";
 
@@ -59,15 +61,21 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
     setLoading(true);
     const quality = leadQuality(v.company_size);
     const attr = readAttribution();
+    const sending = sendLeadEmail({
+      ...v,
+      work_email: v.work_email.trim(),
+      lead_quality: quality,
+      ...attr,
+      page_url: window.location.href,
+      submitted_at: new Date().toLocaleString("en-GB", { timeZone: "Asia/Dubai" }),
+    });
+    // FormSubmit can take up to a minute to reply. Wait at most SEND_WAIT_MS:
+    // a quick failure still shows the error, a slow send carries on in the background
+    // (the thank-you page is a client-side route, so the request is not cancelled).
+    sending.catch(() => {}); // a failure after we moved on must not surface as an unhandled rejection
+    const slow = new Promise<"slow">((r) => setTimeout(() => r("slow"), SEND_WAIT_MS));
     try {
-      await sendLeadEmail({
-        ...v,
-        work_email: v.work_email.trim(),
-        lead_quality: quality,
-        ...attr,
-        page_url: window.location.href,
-        submitted_at: new Date().toLocaleString("en-GB", { timeZone: "Asia/Dubai" }),
-      });
+      await Promise.race([sending, slow]);
       pushEvent({ event: "generate_lead", lead_quality: quality, training_topic: v.training_topic, company_size: v.company_size });
       sessionStorage.setItem("sps_lead", JSON.stringify({ training_topic: v.training_topic, company_size: v.company_size, lead_quality: quality }));
       navigate({ to: "/thankyou" });
