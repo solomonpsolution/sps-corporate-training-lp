@@ -24,6 +24,6 @@ describe("work email", () => {
 describe("headline", () => {
   it("matches topic", () => {
     expect(headlineFor("sales")).toBe("Sales and customer service training that lifts team performance");
-    expect(headlineFor("other")).toBe("Corporate training built around your team, not a general course");
+    expect(headlineFor("other")).toBe("Corporate Training built around your team");
   });
 });
