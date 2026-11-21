@@ -184,14 +184,37 @@ function CountUp({ value }: { value: string }) {
   return <span ref={ref}>{shown}</span>;
 }
 
-function GoogleG() {
+// The review slider renders ~100 cards (each review twice, for the loop). Drawing the
+// star and Google icons inline in every card made the page HTML ~400 KB heavier, so the
+// cards reuse one shared copy of each icon (<symbol> + <use>). Same look.
+const STAR_PATH =
+  "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z";
+
+function ReviewIconSprite() {
   return (
-    <svg viewBox="0 0 48 48" className="h-5 w-5 shrink-0" aria-label="Google review">
-      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
-      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
-      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" />
-      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
+    <svg width="0" height="0" className="absolute" aria-hidden focusable="false">
+      <symbol id="sps-star" viewBox="0 0 24 24">
+        <path d={STAR_PATH} fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </symbol>
+      <symbol id="sps-google" viewBox="0 0 48 48">
+        <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
+        <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
+        <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" />
+        <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
+      </symbol>
     </svg>
+  );
+}
+
+function CardStars() {
+  return (
+    <span className="flex text-highlight" aria-hidden>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <svg key={i} className="h-4 w-4">
+          <use href="#sps-star" />
+        </svg>
+      ))}
+    </span>
   );
 }
 
@@ -199,8 +222,10 @@ function ReviewCard({ r }: { r: Review }) {
   return (
     <figure className="flex w-[300px] shrink-0 flex-col rounded-2xl border border-border bg-card p-6 md:w-[340px]">
       <div className="flex items-center justify-between">
-        <Stars />
-        <GoogleG />
+        <CardStars />
+        <svg className="h-5 w-5 shrink-0" aria-label="Google review" role="img">
+          <use href="#sps-google" />
+        </svg>
       </div>
       <blockquote className="mt-4 line-clamp-6 flex-1 text-[15px] leading-relaxed text-foreground">"{r.text}"</blockquote>
       <figcaption className="mt-4 text-sm">
@@ -220,6 +245,7 @@ function ReviewMarquee({ topic }: { topic: string }) {
   const rows = [ordered.slice(0, half), ordered.slice(half)];
   return (
     <div className="review-marquee mt-10 space-y-6">
+      <ReviewIconSprite />
       <style>{`
         @keyframes sps-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .review-marquee .track { animation: sps-marquee 140s linear infinite; }
