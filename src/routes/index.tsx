@@ -241,14 +241,14 @@ const TOPIC_MATCH: Record<string, Review["topic"]> = { leadership: "leadership",
 function ReviewMarquee({ topic }: { topic: string }) {
   const match = TOPIC_MATCH[topic];
   const ordered = match ? [...REVIEWS.filter((r) => r.topic === match), ...REVIEWS.filter((r) => r.topic !== match)] : REVIEWS;
-  const half = Math.ceil(ordered.length / 2);
-  const rows = [ordered.slice(0, half), ordered.slice(half)];
+  // One sliding row with every review (topic-matched reviews first).
+  const rows = [ordered];
   return (
     <div className="review-marquee mt-10 space-y-6">
       <ReviewIconSprite />
       <style>{`
         @keyframes sps-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .review-marquee .track { animation: sps-marquee 140s linear infinite; }
+        .review-marquee .track { animation: sps-marquee 280s linear infinite; }
         .review-marquee .track.reverse { animation-direction: reverse; }
         .review-marquee:hover .track { animation-play-state: paused; }
         @media (prefers-reduced-motion: reduce) {
