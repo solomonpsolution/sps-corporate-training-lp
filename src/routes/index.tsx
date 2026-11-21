@@ -384,7 +384,7 @@ function Index() {
       </section>
 
       {/* Founder credibility */}
-      <section className="bg-[oklch(0.18_0.03_262)] py-20 text-white" style={{ contentVisibility: "auto" }}>
+      <section id="founder" className="scroll-mt-4 bg-[oklch(0.18_0.03_262)] py-20 text-white" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 md:grid-cols-2">
           <div>
             <h2 className="font-display text-3xl md:text-4xl">Led by Solomon Vijayanand</h2>
@@ -472,7 +472,7 @@ function Index() {
       </section>
 
       {/* Final section with the form on the page */}
-      <section className="bg-[oklch(0.18_0.03_262)] py-20">
+      <section id="contact" className="scroll-mt-4 bg-[oklch(0.18_0.03_262)] py-20">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-[1fr_1fr]">
           <div className="text-white">
             <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">

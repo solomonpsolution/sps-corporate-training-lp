@@ -9,6 +9,7 @@ import {
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { type ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import { CLARITY_ID, GOOGLE_ADS_ID, GTM_ID } from "../lib/sps";
 import appCss from "../styles.css?url";
@@ -140,6 +141,9 @@ function RootShell({ children }: { children: ReactNode }) {
           </noscript>
         )}
         {children}
+        {/* Vercel Web Analytics. On solomonpeoplesolutions.com the script resolves to that
+            domain's /_vercel/insights, so visits are reported in the Vercel project serving the main domain. */}
+        <Analytics />
         <Scripts />
       </body>
     </html>
