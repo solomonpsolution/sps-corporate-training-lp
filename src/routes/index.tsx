@@ -2,11 +2,30 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Check, Phone, Star } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { LeadForm } from "@/components/sps/LeadForm";
 import { Logo, PhoneLink, WhatsAppButton, WhatsAppIcon } from "@/components/sps/Shared";
 import { REVIEWS, type Review } from "@/lib/reviews";
-import { ADDRESS, DEFAULT_HEADLINE, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABEL, PHONE_TEL, TOPICS, URL_TOPIC_TO_FORM, WHATSAPP_URL, adsConversion, captureAttribution, headlineFor, noindexMeta, pushEvent } from "@/lib/sps";
+import {
+  ADDRESS,
+  DEFAULT_HEADLINE,
+  GOOGLE_ADS_PHONE_LABEL,
+  GOOGLE_ADS_WHATSAPP_LABEL,
+  PHONE_TEL,
+  TOPICS,
+  URL_TOPIC_TO_FORM,
+  WHATSAPP_URL,
+  adsConversion,
+  captureAttribution,
+  headlineFor,
+  noindexMeta,
+  pushEvent,
+} from "@/lib/sps";
 
 const GOOGLE_RATING = "4.9";
 const GOOGLE_REVIEWS = "462";
@@ -29,18 +48,61 @@ const CREDENTIALS = [
 ] as const;
 
 const FAQS = [
-  ["How long are the programmes?", "Programme length depends on your goals. We recommend the right format for your team in the proposal."],
-  ["What do we receive before we commit?", "A tailored proposal with the course outline, materials, schedule and cost, so you know exactly what your team will get."],
-  ["How many participants per session?", "Group size depends on the programme. We recommend the right size for your team in the proposal."],
-  ["What happens after the training?", "We review progress against the baseline we agreed with you at the start, so you can see what improved."],
-  ["How soon will you reply?", "We reply to your enquiry within minutes during working hours, then agree the programme and start date with you."],
+  [
+    "How long are the programmes?",
+    "Programme length depends on your goals. We recommend the right format for your team in the proposal.",
+  ],
+  [
+    "What do we receive before we commit?",
+    "A tailored proposal with the course outline, materials, schedule and cost, so you know exactly what your team will get.",
+  ],
+  [
+    "How many participants per session?",
+    "Group size depends on the programme. We recommend the right size for your team in the proposal.",
+  ],
+  [
+    "What happens after the training?",
+    "We review progress against the baseline we agreed with you at the start, so you can see what improved.",
+  ],
+  [
+    "How soon will you reply?",
+    "We reply to your enquiry within minutes during working hours, then agree the programme and start date with you.",
+  ],
 ] as const;
 
 const PROGRAMMES = [
-  { title: TOPICS[0], points: ["Lead and motivate teams with confidence", "Delegate, give feedback and coach", "Make decisions and manage priorities"] },
-  { title: TOPICS[1], points: ["Understand customer needs and objections", "Build trust and close with structure", "Deliver consistent, standout service"] },
-  { title: TOPICS[2], points: ["Communicate clearly in person and in writing", "Handle difficult conversations calmly", "Collaborate across teams and cultures"] },
-  { title: TOPICS[3], points: ["CPD accredited Train the Trainer certificate", "Present with confidence and handle difficult participants", "Design and deliver engaging sessions"] },
+  {
+    title: TOPICS[0],
+    points: [
+      "Lead and motivate teams with confidence",
+      "Delegate, give feedback and coach",
+      "Make decisions and manage priorities",
+    ],
+  },
+  {
+    title: TOPICS[1],
+    points: [
+      "Understand customer needs and objections",
+      "Build trust and close with structure",
+      "Deliver consistent, standout service",
+    ],
+  },
+  {
+    title: TOPICS[2],
+    points: [
+      "Communicate clearly in person and in writing",
+      "Handle difficult conversations calmly",
+      "Collaborate across teams and cultures",
+    ],
+  },
+  {
+    title: TOPICS[3],
+    points: [
+      "CPD accredited Train the Trainer certificate",
+      "Present with confidence and handle difficult participants",
+      "Design and deliver engaging sessions",
+    ],
+  },
 ] as const;
 
 const STEPS = [
@@ -70,9 +132,16 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Corporate Training in Dubai | Solomon People Solutions" },
-      { name: "description", content: "Corporate training built around your team: training needs analysis first, practical sessions by expert trainers, and measured results. Rated 4.9 on Google." },
+      {
+        name: "description",
+        content:
+          "Corporate training built around your team: training needs analysis first, practical sessions by expert trainers, and measured results. Rated 4.9 on Google.",
+      },
       { property: "og:title", content: "Corporate Training in Dubai | Solomon People Solutions" },
-      { property: "og:description", content: "Corporate training built around your team. Rated 4.9 on Google." },
+      {
+        property: "og:description",
+        content: "Corporate training built around your team. Rated 4.9 on Google.",
+      },
       ...noindexMeta,
     ],
     scripts: [
@@ -81,7 +150,11 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          mainEntity: FAQS.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+          mainEntity: FAQS.map(([q, a]) => ({
+            "@type": "Question",
+            name: q,
+            acceptedAnswer: { "@type": "Answer", text: a },
+          })),
         }),
       },
     ],
@@ -161,10 +234,22 @@ function CountUp({ value }: { value: string }) {
 function GoogleG() {
   return (
     <svg viewBox="0 0 48 48" className="h-5 w-5 shrink-0" aria-label="Google review">
-      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
-      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
-      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" />
-      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
+      <path
+        fill="#FFC107"
+        d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"
+      />
+      <path
+        fill="#FF3D00"
+        d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
+      />
+      <path
+        fill="#4CAF50"
+        d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"
+      />
+      <path
+        fill="#1976D2"
+        d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"
+      />
     </svg>
   );
 }
@@ -176,7 +261,9 @@ function ReviewCard({ r }: { r: Review }) {
         <Stars />
         <GoogleG />
       </div>
-      <blockquote className="mt-4 line-clamp-6 flex-1 text-[15px] leading-relaxed text-foreground">"{r.text}"</blockquote>
+      <blockquote className="mt-4 line-clamp-6 flex-1 text-[15px] leading-relaxed text-foreground">
+        "{r.text}"
+      </blockquote>
       <figcaption className="mt-4 text-sm">
         <span className="font-semibold text-foreground">{r.name}</span>
         <span className="text-muted-foreground"> · {r.date}</span>
@@ -185,11 +272,17 @@ function ReviewCard({ r }: { r: Review }) {
   );
 }
 
-const TOPIC_MATCH: Record<string, Review["topic"]> = { leadership: "leadership", sales: "sales", hr: "ttt" };
+const TOPIC_MATCH: Record<string, Review["topic"]> = {
+  leadership: "leadership",
+  sales: "sales",
+  hr: "ttt",
+};
 
 function ReviewMarquee({ topic }: { topic: string }) {
   const match = TOPIC_MATCH[topic];
-  const ordered = match ? [...REVIEWS.filter((r) => r.topic === match), ...REVIEWS.filter((r) => r.topic !== match)] : REVIEWS;
+  const ordered = match
+    ? [...REVIEWS.filter((r) => r.topic === match), ...REVIEWS.filter((r) => r.topic !== match)]
+    : REVIEWS;
   const half = Math.ceil(ordered.length / 2);
   const rows = [ordered.slice(0, half), ordered.slice(half)];
   return (
@@ -205,7 +298,10 @@ function ReviewMarquee({ topic }: { topic: string }) {
         }
       `}</style>
       {rows.map((row, i) => (
-        <div key={i} className="row overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+        <div
+          key={i}
+          className="row overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
+        >
           <div className={`track flex w-max gap-6 ${i === 1 ? "reverse" : ""}`}>
             {[...row, ...row].map((r, k) => (
               <div key={k} aria-hidden={k >= row.length}>
@@ -274,7 +370,10 @@ function Index() {
         <Logo />
         <div className="flex items-center gap-5">
           <PhoneLink className="hidden text-sm font-semibold text-foreground hover:text-primary sm:inline" />
-          <button onClick={() => openForm()} className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+          <button
+            onClick={() => openForm()}
+            className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+          >
             Get in touch
           </button>
         </div>
@@ -284,12 +383,20 @@ function Index() {
       <section className="relative isolate overflow-hidden bg-[oklch(0.18_0.03_262)]">
         <HeroSlides />
         <div className="relative mx-auto flex min-h-[620px] max-w-6xl flex-col justify-center px-5 py-20 md:min-h-[680px]">
-          <h1 className="max-w-3xl font-display text-3xl leading-tight text-white [text-shadow:0_2px_12px_rgb(0_0_0/0.55)] md:text-5xl">{headline}</h1>
+          <h1 className="max-w-3xl font-display text-3xl leading-tight text-white [text-shadow:0_2px_12px_rgb(0_0_0/0.55)] md:text-5xl">
+            {headline}
+          </h1>
           <p className="mt-6 max-w-2xl text-lg text-white/90 [text-shadow:0_1px_8px_rgb(0_0_0/0.6)]">
-            Many companies have paid for training that did not match what was promised. At SPS every programme is customised to your team, and it always starts with your real business needs. We measure the results after, so you can see what changed.
+            Many companies have paid for training that did not match what was promised. At SPS every
+            programme is customised to your team, and it always starts with your real business
+            needs. We measure the results after, so you can see what changed.
           </p>
           <ul className="mt-7 flex flex-col gap-3 text-white sm:flex-row sm:gap-7">
-            {["We assess your team's needs first", "Practical, not just theory", "We reply within minutes"].map((c) => (
+            {[
+              "We assess your team's needs first",
+              "Practical, not just theory",
+              "We reply within minutes",
+            ].map((c) => (
               <li key={c} className="flex items-center gap-2 font-medium">
                 <Check className="h-5 w-5 text-highlight" />
                 {c}
@@ -297,7 +404,10 @@ function Index() {
             ))}
           </ul>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <button onClick={() => openForm()} className="rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90">
+            <button
+              onClick={() => openForm()}
+              className="rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90"
+            >
               Request a proposal
             </button>
             <a
@@ -339,11 +449,15 @@ function Index() {
       </section>
 
       {/* Our experience in numbers */}
-      <section className="border-b border-border bg-card py-20" style={{ contentVisibility: "auto" }}>
+      <section
+        className="border-b border-border bg-card py-20"
+        style={{ contentVisibility: "auto" }}
+      >
         <div className="mx-auto max-w-6xl px-5 text-center">
           <h2 className="font-display text-3xl md:text-4xl">Our experience in numbers</h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Since 2006, SPS has helped organisations across the Middle East, Africa and Asia build stronger leaders and teams.
+            Since 2006, SPS has helped organisations across the Middle East, Africa and Asia build
+            stronger leaders and teams.
           </p>
           <dl className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-4">
             {NUMBERS.map(([n, label]) => (
@@ -362,10 +476,15 @@ function Index() {
       {/* Programmes */}
       <section className="mx-auto max-w-6xl px-5 py-20" style={{ contentVisibility: "auto" }}>
         <h2 className="font-display text-3xl md:text-4xl">Programmes</h2>
-        <p className="mt-3 max-w-2xl text-muted-foreground">Every programme is tailored after we understand your team's skills gaps.</p>
+        <p className="mt-3 max-w-2xl text-muted-foreground">
+          Every programme is tailored after we understand your team's skills gaps.
+        </p>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {PROGRAMMES.map((p) => (
-            <article key={p.title} className="flex flex-col rounded-2xl border border-border bg-card p-7">
+            <article
+              key={p.title}
+              className="flex flex-col rounded-2xl border border-border bg-card p-7"
+            >
               <h3 className="font-display text-xl">{p.title}</h3>
               <ul className="mt-4 flex-1 space-y-2 text-muted-foreground">
                 {p.points.map((pt) => (
@@ -375,7 +494,10 @@ function Index() {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => openForm(p.title)} className="mt-6 self-start rounded-full border-2 border-primary px-5 py-2 font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground">
+              <button
+                onClick={() => openForm(p.title)}
+                className="mt-6 self-start rounded-full border-2 border-primary px-5 py-2 font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground"
+              >
                 Request a proposal
               </button>
             </article>
@@ -384,13 +506,22 @@ function Index() {
       </section>
 
       {/* Founder credibility */}
-      <section id="founder" className="scroll-mt-4 bg-[oklch(0.18_0.03_262)] py-20 text-white" style={{ contentVisibility: "auto" }}>
+      <section
+        id="founder"
+        className="scroll-mt-4 bg-[oklch(0.18_0.03_262)] py-20 text-white"
+        style={{ contentVisibility: "auto" }}
+      >
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 md:grid-cols-2">
           <div>
             <h2 className="font-display text-3xl md:text-4xl">Led by Solomon Vijayanand</h2>
-            <p className="mt-3 text-lg text-highlight">Founder and Managing Director, 30+ years in HR and training</p>
+            <p className="mt-3 text-lg text-highlight">
+              Founder and Managing Director, 30+ years in HR and training
+            </p>
             <p className="mt-6 text-white/85">
-              Solomon has spent more than three decades in HR consulting, organisational development and professional training, with work across the GCC, Asia, Africa and North America. His career includes Titan Watches, The Birla Group, BPL and Toyota Kirloskar. He founded SPS in Dubai in 2006.
+              Solomon has spent more than three decades in HR consulting, organisational development
+              and professional training, with work across the GCC, Asia, Africa and North America.
+              His career includes Titan Watches, The Birla Group, BPL and Toyota Kirloskar. He
+              founded SPS in Dubai in 2006.
             </p>
             <ul className="mt-6 space-y-2 text-white/85">
               {CREDENTIALS.map((c) => (
@@ -409,7 +540,12 @@ function Index() {
               Read his full profile
             </a>
           </div>
-          <img src="/corporate-training-lp/SPS-1.png" alt="Solomon People Solutions certificate presentation" loading="lazy" className="w-full rounded-2xl object-cover shadow-2xl" />
+          <img
+            src="/corporate-training-lp/SPS-1.png"
+            alt="Solomon People Solutions certificate presentation"
+            loading="lazy"
+            className="w-full rounded-2xl object-cover shadow-2xl"
+          />
         </div>
       </section>
 
@@ -417,11 +553,15 @@ function Index() {
       <section className="bg-card py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-6xl px-5">
           <h2 className="font-display text-3xl md:text-4xl">How we work</h2>
-          <p className="mt-3 max-w-2xl text-muted-foreground">Every programme starts with your real business needs, not a ready made course.</p>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Every programme starts with your real business needs, not a ready made course.
+          </p>
           <ol className="mt-10 grid gap-6 md:grid-cols-5">
             {STEPS.map(([t, d], i) => (
               <li key={t} className="rounded-2xl bg-background p-6">
-                <span className="font-display text-3xl text-secondary">{String(i + 1).padStart(2, "0")}</span>
+                <span className="font-display text-3xl text-secondary">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <h3 className="mt-3 text-lg font-semibold">{t}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{d}</p>
               </li>
@@ -431,7 +571,11 @@ function Index() {
       </section>
 
       {/* What participants say: real Google reviews, scrolling */}
-      <section id="testimonials" className="scroll-mt-4 overflow-hidden py-20" style={{ contentVisibility: "auto" }}>
+      <section
+        id="testimonials"
+        className="scroll-mt-4 overflow-hidden py-20"
+        style={{ contentVisibility: "auto" }}
+      >
         <div className="mx-auto max-w-6xl px-5">
           <h2 className="font-display text-3xl md:text-4xl">What participants say</h2>
           <p className="mt-3 flex flex-wrap items-center gap-2 text-muted-foreground">
@@ -463,7 +607,9 @@ function Index() {
           <Accordion type="single" collapsible className="mt-8">
             {FAQS.map(([q, a]) => (
               <AccordionItem key={q} value={q}>
-                <AccordionTrigger className="text-left text-base font-semibold">{q}</AccordionTrigger>
+                <AccordionTrigger className="text-left text-base font-semibold">
+                  {q}
+                </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">{a}</AccordionContent>
               </AccordionItem>
             ))}
@@ -479,8 +625,13 @@ function Index() {
               <span className="h-px w-8 bg-highlight" />
               Contact us
             </p>
-            <h2 className="mt-4 font-display text-3xl leading-tight md:text-5xl">Tell us what your team needs.</h2>
-            <p className="mt-5 text-lg text-white/80">We design a training programme built around your goals and reply within minutes during working hours.</p>
+            <h2 className="mt-4 font-display text-3xl leading-tight md:text-5xl">
+              Tell us what your team needs.
+            </h2>
+            <p className="mt-5 text-lg text-white/80">
+              We design a training programme built around your goals and reply within minutes during
+              working hours.
+            </p>
             <p className="mt-6 text-white/80">
               Prefer to talk? Call <PhoneLink className="font-semibold text-white underline" />
             </p>
@@ -492,8 +643,14 @@ function Index() {
       <footer className="mx-auto max-w-6xl space-y-1 px-5 py-10 pb-24 text-sm text-muted-foreground md:pb-10">
         <p className="font-semibold text-foreground">Solomon People Solutions</p>
         <p>{ADDRESS}</p>
-        <p><PhoneLink className="hover:text-primary" /></p>
-        <p><a href="/corporate-training-lp/privacy" className="underline hover:text-primary">Privacy policy</a></p>
+        <p>
+          <PhoneLink className="hover:text-primary" />
+        </p>
+        <p>
+          <a href="/corporate-training-lp/privacy" className="underline hover:text-primary">
+            Privacy policy
+          </a>
+        </p>
       </footer>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -505,9 +662,12 @@ function Index() {
 
       <Dialog open={exitOpen} onOpenChange={setExitOpen}>
         <DialogContent className="max-w-md rounded-2xl border-0 bg-card p-8 text-center">
-          <DialogTitle className="font-display text-2xl font-normal text-foreground">Before you go</DialogTitle>
+          <DialogTitle className="font-display text-2xl font-normal text-foreground">
+            Before you go
+          </DialogTitle>
           <p className="text-muted-foreground">
-            Get a tailored training proposal for your team. Tell us what you need and we reply within minutes during working hours.
+            Get a tailored training proposal for your team. Tell us what you need and we reply
+            within minutes during working hours.
           </p>
           <div className="mt-2 flex items-center justify-center gap-2 text-sm font-semibold">
             <Stars />
@@ -524,7 +684,10 @@ function Index() {
           >
             Yes, send me a proposal
           </button>
-          <button onClick={() => setExitOpen(false)} className="text-sm text-muted-foreground underline hover:text-foreground">
+          <button
+            onClick={() => setExitOpen(false)}
+            className="text-sm text-muted-foreground underline hover:text-foreground"
+          >
             No thanks
           </button>
         </DialogContent>

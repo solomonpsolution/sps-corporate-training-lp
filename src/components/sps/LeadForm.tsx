@@ -38,18 +38,29 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
     if (topic) setV((p) => ({ ...p, training_topic: topic }));
   }, [topic]);
 
-  const set = (k: keyof Values) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-    setV((p) => ({ ...p, [k]: e.target.value }));
+  const set =
+    (k: keyof Values) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+      setV((p) => ({ ...p, [k]: e.target.value }));
 
   function validate() {
     const e: typeof errors = {};
-    const req: (keyof Values)[] = ["full_name", "work_email", "phone", "company", "company_size", "training_topic"];
+    const req: (keyof Values)[] = [
+      "full_name",
+      "work_email",
+      "phone",
+      "company",
+      "company_size",
+      "training_topic",
+    ];
     for (const k of req) if (!v[k].trim() || v[k].trim() === "+971") e[k] = "Required";
     if (!e.work_email) {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.work_email.trim())) e.work_email = "Please enter a valid email";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.work_email.trim()))
+        e.work_email = "Please enter a valid email";
       else if (isFreeEmail(v.work_email.trim())) e.work_email = "Please use your company email";
     }
-    if (!e.phone && !isValidUaePhone(v.phone)) e.phone = "Please enter a valid UAE number, e.g. +971 50 123 4567";
+    if (!e.phone && !isValidUaePhone(v.phone))
+      e.phone = "Please enter a valid UAE number, e.g. +971 50 123 4567";
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -76,11 +87,25 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
     const slow = new Promise<"slow">((r) => setTimeout(() => r("slow"), SEND_WAIT_MS));
     try {
       await Promise.race([sending, slow]);
-      pushEvent({ event: "generate_lead", lead_quality: quality, training_topic: v.training_topic, company_size: v.company_size });
-      sessionStorage.setItem("sps_lead", JSON.stringify({ training_topic: v.training_topic, company_size: v.company_size, lead_quality: quality }));
+      pushEvent({
+        event: "generate_lead",
+        lead_quality: quality,
+        training_topic: v.training_topic,
+        company_size: v.company_size,
+      });
+      sessionStorage.setItem(
+        "sps_lead",
+        JSON.stringify({
+          training_topic: v.training_topic,
+          company_size: v.company_size,
+          lead_quality: quality,
+        }),
+      );
       navigate({ to: "/thankyou" });
     } catch {
-      setSubmitError(`Sorry, we couldn't send your request. Please try again, or call us on ${PHONE_DISPLAY}. Your details are still here.`);
+      setSubmitError(
+        `Sorry, we couldn't send your request. Please try again, or call us on ${PHONE_DISPLAY}. Your details are still here.`,
+      );
       setLoading(false);
     }
   }
@@ -104,19 +129,66 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
   );
 
   return (
-    <form id={id} onSubmit={onSubmit} noValidate className="scroll-mt-6 rounded-2xl border border-border bg-card p-6 shadow-xl shadow-foreground/5 md:p-7">
+    <form
+      id={id}
+      onSubmit={onSubmit}
+      noValidate
+      className="scroll-mt-6 rounded-2xl border border-border bg-card p-6 shadow-xl shadow-foreground/5 md:p-7"
+    >
       <h2 className="font-display text-2xl text-foreground">Request a training proposal</h2>
       <div className="mt-5 space-y-4">
-        {field("full_name", "Full name", <input className={inputCls} value={v.full_name} onChange={set("full_name")} autoComplete="name" />)}
-        {field("work_email", "Work email", <input type="email" className={inputCls} value={v.work_email} onChange={set("work_email")} autoComplete="email" />)}
-        {field("phone", "Mobile or WhatsApp number", <input type="tel" className={inputCls} value={v.phone} onChange={set("phone")} autoComplete="tel" />)}
+        {field(
+          "full_name",
+          "Full name",
+          <input
+            className={inputCls}
+            value={v.full_name}
+            onChange={set("full_name")}
+            autoComplete="name"
+          />,
+        )}
+        {field(
+          "work_email",
+          "Work email",
+          <input
+            type="email"
+            className={inputCls}
+            value={v.work_email}
+            onChange={set("work_email")}
+            autoComplete="email"
+          />,
+        )}
+        {field(
+          "phone",
+          "Mobile or WhatsApp number",
+          <input
+            type="tel"
+            className={inputCls}
+            value={v.phone}
+            onChange={set("phone")}
+            autoComplete="tel"
+          />,
+        )}
         <div className="grid gap-4 sm:grid-cols-2">
-          {field("company", "Company name", <input className={inputCls} value={v.company} onChange={set("company")} autoComplete="organization" />)}
+          {field(
+            "company",
+            "Company name",
+            <input
+              className={inputCls}
+              value={v.company}
+              onChange={set("company")}
+              autoComplete="organization"
+            />,
+          )}
           {field("company_size", "Company size", select("company_size", COMPANY_SIZES))}
         </div>
         {field("training_topic", "Training topic", select("training_topic", TOPIC_OPTIONS))}
       </div>
-      {submitError && <p role="alert" className="mt-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{submitError}</p>}
+      {submitError && (
+        <p role="alert" className="mt-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+          {submitError}
+        </p>
+      )}
       <button
         type="submit"
         disabled={loading}
@@ -124,7 +196,9 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
       >
         {loading ? "Sending…" : "Request my proposal"}
       </button>
-      <p className="mt-3 text-center text-sm text-muted-foreground">We reply within minutes during working hours.</p>
+      <p className="mt-3 text-center text-sm text-muted-foreground">
+        We reply within minutes during working hours.
+      </p>
     </form>
   );
 }

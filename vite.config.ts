@@ -6,11 +6,18 @@ import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 
 export default defineConfig(({ command }) => ({
-    base: "/corporate-training-lp/",
+  base: "/corporate-training-lp/",
   css: { transformer: "lightningcss" },
   resolve: {
     alias: { "@": `${process.cwd()}/src` },
-    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
+    dedupe: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "@tanstack/react-query",
+      "@tanstack/query-core",
+    ],
   },
   plugins: [
     tailwindcss(),
@@ -19,7 +26,10 @@ export default defineConfig(({ command }) => ({
       // Use src/server.ts (SSR error wrapper) as the server entry.
       server: { entry: "server" },
       router: { basepath: "/" },
-      importProtection: { behavior: "error", client: { files: ["**/server/**"], specifiers: ["server-only"] } },
+      importProtection: {
+        behavior: "error",
+        client: { files: ["**/server/**"], specifiers: ["server-only"] },
+      },
     }),
     ...(command === "build" ? [nitro({ baseURL: "/corporate-training-lp/" })] : []),
     viteReact(),

@@ -64,7 +64,14 @@ export function leadQuality(size: string): "qualified" | "standard" {
 }
 
 // ---- Tracking (browser only) ----
-export const TRACK_KEYS = ["gclid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "topic"] as const;
+export const TRACK_KEYS = [
+  "gclid",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "topic",
+] as const;
 const COOKIE = "sps_attr";
 
 export function readAttribution(): Record<string, string> {
@@ -113,8 +120,12 @@ async function postLead(to: string, cc: string, lead: Record<string, string>) {
       ...lead,
     }),
   });
-  const json = (await res.json().catch(() => ({}))) as { success?: string | boolean; message?: string };
-  if (!res.ok || String(json.success) !== "true") throw new Error(json.message || `status ${res.status}`);
+  const json = (await res.json().catch(() => ({}))) as {
+    success?: string | boolean;
+    message?: string;
+  };
+  if (!res.ok || String(json.success) !== "true")
+    throw new Error(json.message || `status ${res.status}`);
 }
 
 export async function sendLeadEmail(lead: Record<string, string>) {

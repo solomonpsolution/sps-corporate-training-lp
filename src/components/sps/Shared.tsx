@@ -1,5 +1,14 @@
 import { useEffect } from "react";
-import { GOOGLE_ADS_LEAD_LABEL, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABEL, PHONE_DISPLAY, PHONE_TEL, WHATSAPP_URL, adsConversion, pushEvent } from "@/lib/sps";
+import {
+  GOOGLE_ADS_LEAD_LABEL,
+  GOOGLE_ADS_PHONE_LABEL,
+  GOOGLE_ADS_WHATSAPP_LABEL,
+  PHONE_DISPLAY,
+  PHONE_TEL,
+  WHATSAPP_URL,
+  adsConversion,
+  pushEvent,
+} from "@/lib/sps";
 
 export function Logo() {
   return (
@@ -45,10 +54,14 @@ export function WhatsAppButton({ floating = false }: { floating?: boolean }) {
 
 export function PhoneLink({ className = "" }: { className?: string }) {
   return (
-    <a href={PHONE_TEL} onClick={() => {
+    <a
+      href={PHONE_TEL}
+      onClick={() => {
         pushEvent({ event: "phone_click" });
         adsConversion(GOOGLE_ADS_PHONE_LABEL);
-      }} className={className}>
+      }}
+      className={className}
+    >
       {PHONE_DISPLAY}
     </a>
   );
