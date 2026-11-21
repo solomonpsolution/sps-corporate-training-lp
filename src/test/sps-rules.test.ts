@@ -13,7 +13,14 @@ describe("lead qualification", () => {
 
 describe("work email", () => {
   it("rejects free providers", () => {
-    for (const d of ["gmail.com", "yahoo.co.uk", "hotmail.com", "outlook.com", "icloud.com", "live.com"])
+    for (const d of [
+      "gmail.com",
+      "yahoo.co.uk",
+      "hotmail.com",
+      "outlook.com",
+      "icloud.com",
+      "live.com",
+    ])
       expect(isFreeEmail(`a@${d}`)).toBe(true);
   });
   it("accepts company domains", () => {
@@ -23,7 +30,9 @@ describe("work email", () => {
 
 describe("headline", () => {
   it("matches topic", () => {
-    expect(headlineFor("sales")).toBe("Sales and customer service training that lifts team performance");
+    expect(headlineFor("sales")).toBe(
+      "Sales and customer service training that lifts team performance",
+    );
     expect(headlineFor("other")).toBe("Corporate Training built around your team");
   });
 });

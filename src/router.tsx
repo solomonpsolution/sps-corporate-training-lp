@@ -12,11 +12,13 @@ export const getRouter = () => {
     rewrite: {
       input: ({ url }) => {
         if (url.pathname === "/corporate-training-lp") url.pathname = "/";
-        else if (url.pathname.startsWith("/corporate-training-lp/")) url.pathname = url.pathname.slice(22);
+        else if (url.pathname.startsWith("/corporate-training-lp/"))
+          url.pathname = url.pathname.slice(22);
         return url;
       },
       output: ({ url }) => {
-        url.pathname = url.pathname === "/" ? "/corporate-training-lp" : `/corporate-training-lp${url.pathname}`;
+        url.pathname =
+          url.pathname === "/" ? "/corporate-training-lp" : `/corporate-training-lp${url.pathname}`;
         return url;
       },
     },

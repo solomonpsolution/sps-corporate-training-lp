@@ -19,8 +19,12 @@ function ThankYou() {
   useThankYouEvent();
   return (
     <SimpleShell>
-      <h1 className="mt-10 font-display text-3xl leading-tight md:text-4xl">Thank you, our team will reply within minutes during working hours.</h1>
-      <div className="mt-8"><WhatsAppButton /></div>
+      <h1 className="mt-10 font-display text-3xl leading-tight md:text-4xl">
+        Thank you, our team will reply within minutes during working hours.
+      </h1>
+      <div className="mt-8">
+        <WhatsAppButton />
+      </div>
     </SimpleShell>
   );
 }
