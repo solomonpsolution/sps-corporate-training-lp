@@ -10,7 +10,13 @@ import { ADDRESS, DEFAULT_HEADLINE, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_
 
 const GOOGLE_RATING = "4.9";
 const GOOGLE_REVIEWS = "462";
-const SLIDES = ["SPS-2.png", "SPS-1.png", "SPS-3.png"] as const;
+// WebP versions of the hero photos (about 30-40 KB each instead of ~120 KB PNG).
+// [file, width, height]
+const SLIDES = [
+  ["SPS-2.webp", 567, 426],
+  ["SPS-1.webp", 563, 461],
+  ["SPS-3.webp", 593, 400],
+] as const;
 
 // Figures published on the SPS founder page (solomonpeoplesolutions.com/founder).
 const NUMBERS = [
@@ -101,23 +107,37 @@ function Stars() {
 
 function HeroSlides() {
   const [active, setActive] = useState(0);
+  // Only the first photo is in the initial HTML; the other two are added after the
+  // page has loaded, so they don't compete with the first one on slow phones.
+  const [showRest, setShowRest] = useState(false);
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const show = () => setShowRest(true);
+    if (document.readyState === "complete") show();
+    else window.addEventListener("load", show, { once: true });
+    return () => window.removeEventListener("load", show);
+  }, []);
+  useEffect(() => {
+    if (!showRest || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setInterval(() => setActive((a) => (a + 1) % SLIDES.length), 5000);
     return () => clearInterval(t);
-  }, []);
+  }, [showRest]);
   return (
     <>
-      {SLIDES.map((f, i) => (
-        <img
-          key={f}
-          src={`/corporate-training-lp/${f}`}
-          alt=""
-          aria-hidden
-          fetchPriority={i === 0 ? "high" : "low"}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${i === active ? "opacity-100" : "opacity-0"}`}
-        />
-      ))}
+      {SLIDES.map(([f, w, h], i) =>
+        i === 0 || showRest ? (
+          <img
+            key={f}
+            src={`/corporate-training-lp/${f}`}
+            alt=""
+            aria-hidden
+            width={w}
+            height={h}
+            decoding="async"
+            fetchPriority={i === 0 ? "high" : "low"}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${i === active ? "opacity-100" : "opacity-0"}`}
+          />
+        ) : null,
+      )}
       <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.15_0.03_262)]/85 via-[oklch(0.15_0.03_262)]/55 to-[oklch(0.15_0.03_262)]/10" />
     </>
   );
@@ -409,7 +429,7 @@ function Index() {
               Read his full profile
             </a>
           </div>
-          <img src="/corporate-training-lp/SPS-1.png" alt="Solomon People Solutions certificate presentation" loading="lazy" className="w-full rounded-2xl object-cover shadow-2xl" />
+          <img src="/corporate-training-lp/SPS-1.webp" alt="Solomon People Solutions certificate presentation" width={563} height={461} loading="lazy" decoding="async" className="w-full rounded-2xl object-cover shadow-2xl" />
         </div>
       </section>
 

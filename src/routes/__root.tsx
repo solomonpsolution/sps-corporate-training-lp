@@ -85,6 +85,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", type: "image/png", href: "/corporate-training-lp/favicon.png" },
+      // Start downloading the first hero photo (the largest visible element) right away.
+      { rel: "preload", as: "image", href: "/corporate-training-lp/SPS-2.webp", type: "image/webp", fetchPriority: "high" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
