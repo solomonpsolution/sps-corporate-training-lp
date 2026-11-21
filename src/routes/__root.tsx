@@ -71,6 +71,13 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+const FONT_CSS =
+  "https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap";
+
+// Inline helper: run fn once the page has finished loading (or right away if it already has).
+const AFTER_LOAD =
+  "(function(fn){if(document.readyState==='complete')fn();else window.addEventListener('load',fn,{once:true});})";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -89,12 +96,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preload", as: "image", href: "/corporate-training-lp/SPS-2.webp", type: "image/webp", fetchPriority: "high" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap",
-      },
+      // Fonts: fetched early but applied without blocking the first paint (see FONT_CSS script below).
+      { rel: "preload", as: "style", href: FONT_CSS },
     ],
     scripts: [
+      { children: `(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='${FONT_CSS}';document.head.appendChild(l);})();` },
       ...(GTM_ID
         ? [
             {
@@ -104,16 +110,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         : []),
       ...(GOOGLE_ADS_ID
         ? [
-            { src: `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`, async: true },
             {
-              children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${GOOGLE_ADS_ID}');`,
+              // gtag() is defined at once, so conversions fired early are queued in dataLayer.
+              // The 165 KB gtag.js library itself loads after the page has painted.
+              children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${GOOGLE_ADS_ID}');${AFTER_LOAD}(function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}';document.head.appendChild(s);});`,
             },
           ]
         : []),
       ...(CLARITY_ID
         ? [
             {
-              children: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${CLARITY_ID}");`,
+              children: `${AFTER_LOAD}(function(){(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${CLARITY_ID}");});`,
             },
           ]
         : []),
