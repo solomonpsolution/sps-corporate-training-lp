@@ -6,6 +6,7 @@ export const GOOGLE_ADS_ID = "AW-925863685";
 export const GOOGLE_ADS_LEAD_LABEL = "8SiyCMiNoLYdEIWevrkD"; // SPS NEW CT LP - FORM SUBMIT (primary)
 export const GOOGLE_ADS_WHATSAPP_LABEL = "qlVkCMuNoLYdEIWevrkD"; // SPS NEW CT LP - WHATSAPP CLICK (secondary)
 export const GOOGLE_ADS_PHONE_LABEL = "R-RcCM6NoLYdEIWevrkD"; // SPS NEW CT LP - PHONE CLICK (secondary)
+export const CLARITY_ID = "zh0l06j1pj"; // Microsoft Clarity project "sps"
 
 // Leads are emailed to LEAD_EMAIL through FormSubmit (formsubmit.co), with a copy to LEAD_CC.
 // The first submission to a new LEAD_EMAIL sends an activation email to that inbox; click it once.
