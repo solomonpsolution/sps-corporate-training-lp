@@ -6,7 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { LeadForm } from "@/components/sps/LeadForm";
 import { Logo, PhoneLink, WhatsAppButton, WhatsAppIcon } from "@/components/sps/Shared";
 import { REVIEWS, type Review } from "@/lib/reviews";
-import { ADDRESS, DEFAULT_HEADLINE, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABEL, PHONE_TEL, TOPICS, URL_TOPIC_TO_FORM, WHATSAPP_URL, adsConversion, captureAttribution, headlineFor, noindexMeta, pushEvent } from "@/lib/sps";
+import { ADDRESS, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABEL, PHONE_TEL, TOPICS, URL_TOPIC_TO_FORM, WHATSAPP_URL, adsConversion, captureAttribution, headlineFor, noindexMeta, pushEvent } from "@/lib/sps";
 
 const GOOGLE_RATING = "4.9";
 const GOOGLE_REVIEWS = "462";
@@ -91,6 +91,12 @@ export const Route = createFileRoute("/")({
         }),
       },
     ],
+  }),
+  // Read ?topic= on the server too, so the right headline is in the first HTML
+  // (no headline swap after load). Other params (gclid, utm_*, section) are kept as-is.
+  validateSearch: (s: Record<string, unknown>): Record<string, unknown> & { topic?: string | undefined } => ({
+    ...s,
+    topic: typeof s["topic"] === "string" ? s["topic"] : undefined,
   }),
   component: Index,
 });
@@ -240,17 +246,15 @@ function ReviewMarquee({ topic }: { topic: string }) {
 }
 
 function Index() {
-  const [headline, setHeadline] = useState(DEFAULT_HEADLINE);
-  const [topic, setTopic] = useState("");
-  const [topicKey, setTopicKey] = useState("");
+  const { topic: urlTopic } = Route.useSearch();
+  const key = (urlTopic ?? "").toLowerCase();
+  const headline = headlineFor(urlTopic);
+  const topicKey = key;
+  const [topic, setTopic] = useState(URL_TOPIC_TO_FORM[key] ?? "");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     captureAttribution();
-    const t = new URLSearchParams(window.location.search).get("topic");
-    setHeadline(headlineFor(t));
-    setTopicKey((t ?? "").toLowerCase());
-    if (t && URL_TOPIC_TO_FORM[t.toLowerCase()]) setTopic(URL_TOPIC_TO_FORM[t.toLowerCase()] ?? "");
   }, []);
 
   const [exitOpen, setExitOpen] = useState(false);
