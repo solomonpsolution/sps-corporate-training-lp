@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { headlineFor, isFreeEmail, leadQuality } from "@/lib/sps";
+import { headlineFor, leadQuality } from "@/lib/sps";
 
 describe("lead qualification", () => {
   it("qualified when company has 51+ staff", () => {
@@ -8,16 +8,6 @@ describe("lead qualification", () => {
   });
   it("standard when company is 1 to 50", () => {
     expect(leadQuality("1 to 50")).toBe("standard");
-  });
-});
-
-describe("work email", () => {
-  it("rejects free providers", () => {
-    for (const d of ["gmail.com", "yahoo.co.uk", "hotmail.com", "outlook.com", "icloud.com", "live.com"])
-      expect(isFreeEmail(`a@${d}`)).toBe(true);
-  });
-  it("accepts company domains", () => {
-    expect(isFreeEmail("a@acme.ae")).toBe(false);
   });
 });
 

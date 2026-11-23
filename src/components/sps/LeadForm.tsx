@@ -3,7 +3,6 @@ import { useNavigate } from "@tanstack/react-router";
 import {
   COMPANY_SIZES,
   TOPIC_OPTIONS,
-  isFreeEmail,
   isValidUaePhone,
   PHONE_DISPLAY,
   leadQuality,
@@ -47,7 +46,6 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
     for (const k of req) if (!v[k].trim() || v[k].trim() === "+971") e[k] = "Required";
     if (!e.work_email) {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.work_email.trim())) e.work_email = "Please enter a valid email";
-      else if (isFreeEmail(v.work_email.trim())) e.work_email = "Please use your company email";
     }
     if (!e.phone && !isValidUaePhone(v.phone)) e.phone = "Please enter a valid UAE number, e.g. +971 50 123 4567";
     setErrors(e);
@@ -108,7 +106,7 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
       <h2 className="font-display text-2xl text-foreground">Request a training proposal</h2>
       <div className="mt-5 space-y-4">
         {field("full_name", "Full name", <input className={inputCls} value={v.full_name} onChange={set("full_name")} autoComplete="name" />)}
-        {field("work_email", "Work email", <input type="email" className={inputCls} value={v.work_email} onChange={set("work_email")} autoComplete="email" />)}
+        {field("work_email", "Email", <input type="email" className={inputCls} value={v.work_email} onChange={set("work_email")} autoComplete="email" />)}
         {field("phone", "Mobile or WhatsApp number", <input type="tel" className={inputCls} value={v.phone} onChange={set("phone")} autoComplete="tel" />)}
         <div className="grid gap-4 sm:grid-cols-2">
           {field("company", "Company name", <input className={inputCls} value={v.company} onChange={set("company")} autoComplete="organization" />)}

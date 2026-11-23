@@ -46,13 +46,6 @@ export function headlineFor(topic: string | null | undefined) {
   return (topic && HEADLINES[topic.toLowerCase()]) || DEFAULT_HEADLINE;
 }
 
-const FREE_DOMAINS = ["gmail", "yahoo", "hotmail", "outlook", "icloud", "live"];
-export function isFreeEmail(email: string) {
-  const domain = email.split("@")[1]?.toLowerCase() ?? "";
-  const first = domain.split(".")[0];
-  return FREE_DOMAINS.includes(first ?? "");
-}
-
 export function isValidUaePhone(phone: string) {
   const d = phone.replace(/[\s\-()]/g, "");
   return /^(\+971|00971|0)?(5\d{8}|[2-9]\d{7})$/.test(d);
