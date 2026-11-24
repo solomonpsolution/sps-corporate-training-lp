@@ -473,6 +473,21 @@ function Index() {
         </div>
       </section>
 
+      {/* Why SPS */}
+      <section className="bg-card py-20" style={{ contentVisibility: "auto" }}>
+        <div className="mx-auto max-w-3xl px-5">
+          <h2 className="font-display text-3xl md:text-4xl">Why choose SPS?</h2>
+          <ul className="mt-8 space-y-4">
+            {WHY.map((w) => (
+              <li key={w} className="flex gap-3 text-lg">
+                <Check className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                {w}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* Programmes */}
       <section className="mx-auto max-w-6xl px-5 py-20" style={{ contentVisibility: "auto" }}>
         <h2 className="font-display text-3xl md:text-4xl">Programmes</h2>
@@ -544,23 +559,8 @@ function Index() {
         </div>
       </section>
 
-      {/* Why SPS */}
-      <section className="py-20" style={{ contentVisibility: "auto" }}>
-        <div className="mx-auto max-w-3xl px-5">
-          <h2 className="font-display text-3xl md:text-4xl">Why choose SPS?</h2>
-          <ul className="mt-8 space-y-4">
-            {WHY.map((w) => (
-              <li key={w} className="flex gap-3 text-lg">
-                <Check className="mt-1 h-5 w-5 shrink-0 text-primary" />
-                {w}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       {/* FAQ */}
-      <section className="bg-card py-20" style={{ contentVisibility: "auto" }}>
+      <section className="py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-3xl px-5">
           <h2 className="font-display text-3xl md:text-4xl">Frequently asked questions</h2>
           <Accordion type="single" collapsible className="mt-8">
