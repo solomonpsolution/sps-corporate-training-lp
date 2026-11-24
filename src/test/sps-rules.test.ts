@@ -14,6 +14,9 @@ describe("lead qualification", () => {
 describe("headline", () => {
   it("matches topic", () => {
     expect(headlineFor("sales")).toBe("Sales and customer service training that lifts team performance");
+    expect(headlineFor("employee")).toContain("Employee and staff training");
+    expect(headlineFor("hr-training")).toContain("HR training");
+    expect(headlineFor("communication")).toContain("Communication and soft skills");
     expect(headlineFor("other")).toBe("Corporate Training built around your team");
   });
 });
