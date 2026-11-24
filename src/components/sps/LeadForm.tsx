@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import {
   COMPANY_SIZES,
   TOPIC_OPTIONS,
+  adSource,
   isValidUaePhone,
   PHONE_DISPLAY,
   leadQuality,
@@ -63,6 +64,7 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
       ...v,
       work_email: v.work_email.trim(),
       lead_quality: quality,
+      ad_source: adSource(attr),
       ...attr,
       page_url: window.location.href,
       submitted_at: new Date().toLocaleString("en-GB", { timeZone: "Asia/Dubai" }),

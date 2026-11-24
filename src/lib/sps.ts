@@ -63,7 +63,7 @@ export function leadQuality(size: string): "qualified" | "standard" {
 }
 
 // ---- Tracking (browser only) ----
-export const TRACK_KEYS = ["gclid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "topic"] as const;
+export const TRACK_KEYS = ["gclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "topic"] as const;
 const COOKIE = "sps_attr";
 
 export function readAttribution(): Record<string, string> {
@@ -87,10 +87,22 @@ export function captureAttribution() {
       changed = true;
     }
   }
+  // Remember where the first visit came from (e.g. google.com, or empty for a direct visit).
+  if (!("referrer" in current)) {
+    current["referrer"] = document.referrer ? new URL(document.referrer).hostname : "direct";
+    changed = true;
+  }
   if (changed) {
     document.cookie = `${COOKIE}=${encodeURIComponent(JSON.stringify(current))}; max-age=${60 * 60 * 24 * 90}; path=/; SameSite=Lax`;
   }
   return current;
+}
+
+/** Plain-language source for the lead email. */
+export function adSource(attr: Record<string, string>): string {
+  if (attr["gclid"] || attr["gbraid"] || attr["wbraid"]) return "Google Ads click";
+  if (attr["utm_source"]) return `Tagged link: ${attr["utm_source"]}`;
+  return `Not from an ad (came from: ${attr["referrer"] || "unknown"})`;
 }
 
 declare global {

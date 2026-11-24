@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { headlineFor, leadQuality } from "@/lib/sps";
+import { adSource, headlineFor, leadQuality } from "@/lib/sps";
 
 describe("lead qualification", () => {
   it("qualified when company has 51+ staff", () => {
@@ -18,5 +18,13 @@ describe("headline", () => {
     expect(headlineFor("hr-training")).toContain("HR training");
     expect(headlineFor("communication")).toContain("Communication and soft skills");
     expect(headlineFor("other")).toBe("Corporate Training built around your team");
+  });
+});
+
+describe("ad source", () => {
+  it("labels where the lead came from", () => {
+    expect(adSource({ gclid: "abc" })).toBe("Google Ads click");
+    expect(adSource({ wbraid: "x" })).toBe("Google Ads click");
+    expect(adSource({ referrer: "direct" })).toBe("Not from an ad (came from: direct)");
   });
 });
