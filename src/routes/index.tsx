@@ -234,33 +234,85 @@ const TOPIC_MATCH: Record<string, Review["topic"]> = { leadership: "leadership",
 
 function ReviewMarquee({ topic }: { topic: string }) {
   const match = TOPIC_MATCH[topic];
-  const ordered = match ? [...REVIEWS.filter((r) => r.topic === match), ...REVIEWS.filter((r) => r.topic !== match)] : REVIEWS;
-  // One sliding row with every review (topic-matched reviews first).
-  const rows = [ordered];
-  return (
-    <div className="review-marquee mt-10 space-y-6">
-      <ReviewIconSprite />
-      <style>{`
-        @keyframes sps-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .review-marquee .track { animation: sps-marquee 280s linear infinite; }
-        .review-marquee .track.reverse { animation-direction: reverse; }
-        .review-marquee:hover .track { animation-play-state: paused; }
-        @media (prefers-reduced-motion: reduce) {
-          .review-marquee .track { animation: none; }
-          .review-marquee .row { overflow-x: auto; }
+  const row = match ? [...REVIEWS.filter((r) => r.topic === match), ...REVIEWS.filter((r) => r.topic !== match)] : REVIEWS;
+  const ref = useRef<HTMLDivElement>(null);
+  const paused = useRef(false);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  // Slides slowly on its own, and visitors can also swipe or drag it left and right.
+  // The row holds every review twice, so wrapping at the halfway point looks seamless.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let raf = 0;
+    let last = performance.now();
+    let pos = el.scrollLeft;
+    const tick = (t: number) => {
+      const half = el.scrollWidth / 2;
+      if (half > 0) {
+        if (!paused.current && !reduce) {
+          pos += ((t - last) / 1000) * (half / 280);
+          el.scrollLeft = pos;
+        } else {
+          pos = el.scrollLeft;
         }
-      `}</style>
-      {rows.map((row, i) => (
-        <div key={i} className="row overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
-          <div className={`track flex w-max gap-6 ${i === 1 ? "reverse" : ""}`}>
-            {[...row, ...row].map((r, k) => (
-              <div key={k} aria-hidden={k >= row.length}>
-                <ReviewCard r={r} />
-              </div>
-            ))}
-          </div>
+        if (pos >= half) pos -= half;
+        else if (pos <= 0 && paused.current) pos += half;
+        if (Math.abs(el.scrollLeft - pos) > 1) el.scrollLeft = pos;
+      }
+      last = t;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const pause = () => {
+    paused.current = true;
+    clearTimeout(resumeTimer.current);
+  };
+  const resumeSoon = () => {
+    clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => (paused.current = false), 2500);
+  };
+  const nudge = (dir: 1 | -1) => {
+    pause();
+    ref.current?.scrollBy({ left: dir * 344, behavior: "smooth" });
+    resumeSoon();
+  };
+
+  return (
+    <div className="review-marquee relative mt-10">
+      <ReviewIconSprite />
+      <div
+        ref={ref}
+        onPointerEnter={pause}
+        onPointerLeave={resumeSoon}
+        onTouchStart={pause}
+        onTouchEnd={resumeSoon}
+        onWheel={() => {
+          pause();
+          resumeSoon();
+        }}
+        className="overflow-x-auto [scrollbar-width:none] [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] [&::-webkit-scrollbar]:hidden"
+      >
+        <div className="flex w-max gap-6 px-[6%]">
+          {[...row, ...row].map((r, k) => (
+            <div key={k} aria-hidden={k >= row.length}>
+              <ReviewCard r={r} />
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
+      <div className="mt-6 flex justify-center gap-3">
+        <button type="button" aria-label="Previous reviews" onClick={() => nudge(-1)} className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-xl text-foreground hover:bg-accent">
+          ‹
+        </button>
+        <button type="button" aria-label="Next reviews" onClick={() => nudge(1)} className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-xl text-foreground hover:bg-accent">
+          ›
+        </button>
+      </div>
     </div>
   );
 }
@@ -405,6 +457,19 @@ function Index() {
               </div>
             ))}
           </dl>
+        </div>
+      </section>
+
+      {/* Mid-page call to action, for visitors ready to enquire before the bottom form */}
+      <section className="bg-[oklch(0.18_0.03_262)] py-14 text-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="font-display text-2xl md:text-3xl">Get a training proposal in 1 working day</h2>
+            <p className="mt-2 max-w-xl text-white/80">Tell us about your team and goals. We'll send a programme outline built around them.</p>
+          </div>
+          <button onClick={() => openForm()} className="shrink-0 rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90">
+            Get proposal
+          </button>
         </div>
       </section>
 
