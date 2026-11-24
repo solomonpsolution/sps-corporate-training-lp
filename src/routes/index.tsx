@@ -314,13 +314,16 @@ function Index() {
 
   return (
     <div className="bg-background text-foreground">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-        <Logo />
-        <div className="flex items-center gap-5">
-          <PhoneLink className="hidden text-sm font-semibold text-foreground hover:text-primary sm:inline" />
-          <button onClick={() => openForm()} className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-            Get in touch
-          </button>
+      {/* Stays at the top while scrolling, so "Get in touch" is always one tap away. */}
+      <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
+          <Logo />
+          <div className="flex items-center gap-5">
+            <PhoneLink className="hidden text-sm font-semibold text-foreground hover:text-primary sm:inline" />
+            <button onClick={() => openForm()} className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+              Get in touch
+            </button>
+          </div>
         </div>
       </header>
 
@@ -374,7 +377,7 @@ function Index() {
       </section>
 
       {/* What participants say: real Google reviews, scrolling */}
-      <section id="testimonials" className="scroll-mt-4 overflow-hidden py-20" style={{ contentVisibility: "auto" }}>
+      <section id="testimonials" className="scroll-mt-20 overflow-hidden py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-6xl px-5">
           <h2 className="font-display text-3xl md:text-4xl">What participants say</h2>
           <p className="mt-3 flex flex-wrap items-center gap-2 text-muted-foreground">
@@ -430,7 +433,7 @@ function Index() {
       </section>
 
       {/* Founder credibility */}
-      <section id="founder" className="scroll-mt-4 bg-[oklch(0.18_0.03_262)] py-20 text-white" style={{ contentVisibility: "auto" }}>
+      <section id="founder" className="scroll-mt-20 bg-[oklch(0.18_0.03_262)] py-20 text-white" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 md:grid-cols-2">
           <div>
             <h2 className="font-display text-3xl md:text-4xl">Led by Solomon Vijayanand</h2>
@@ -507,7 +510,7 @@ function Index() {
       </section>
 
       {/* Final section with the form on the page */}
-      <section id="contact" className="scroll-mt-4 bg-[oklch(0.18_0.03_262)] py-20">
+      <section id="contact" className="scroll-mt-20 bg-[oklch(0.18_0.03_262)] py-20">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-[1fr_1fr]">
           <div className="text-white">
             <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
