@@ -66,12 +66,6 @@ const WHY = [
   "CPD accredited Train the Trainer and Certified Training Function Manager",
 ] as const;
 
-const TESTIMONIALS = [
-  "The course, expertly led by Mr. Solomon, was not only highly informative but also incredibly engaging.",
-  "The session was engaging, interactive and enjoyable. His excellent communication skills and ability to keep everyone involved made learning fun and meaningful. The session was full of valuable insights and practical knowledge.",
-  "He explains everything clearly and makes learning easy and enjoyable. Very supportive, patient and motivating. Truly appreciate the guidance, knowledge and positive energy.",
-] as const;
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -376,15 +370,6 @@ function Index() {
               Call now
             </a>
           </div>
-          <figure className="mt-9 max-w-xl rounded-2xl border border-white/20 bg-white/10 p-5 text-white backdrop-blur-sm">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <Stars />
-              <span>
-                {GOOGLE_RATING} on Google from {GOOGLE_REVIEWS} reviews
-              </span>
-            </div>
-            <blockquote className="mt-3 text-white/85">"{TESTIMONIALS[0]}"</blockquote>
-          </figure>
         </div>
       </section>
 
