@@ -388,6 +388,17 @@ function Index() {
         </div>
       </section>
 
+      {/* What participants say: real Google reviews, scrolling */}
+      <section id="testimonials" className="scroll-mt-4 overflow-hidden py-20" style={{ contentVisibility: "auto" }}>
+        <div className="mx-auto max-w-6xl px-5">
+          <h2 className="font-display text-3xl md:text-4xl">What participants say</h2>
+          <p className="mt-3 flex flex-wrap items-center gap-2 text-muted-foreground">
+            <Stars /> {GOOGLE_RATING} on Google from {GOOGLE_REVIEWS} reviews
+          </p>
+        </div>
+        <ReviewMarquee topic={topicKey} />
+      </section>
+
       {/* Our experience in numbers */}
       <section className="border-b border-border bg-card py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-6xl px-5 text-center">
@@ -480,19 +491,8 @@ function Index() {
         </div>
       </section>
 
-      {/* What participants say: real Google reviews, scrolling */}
-      <section id="testimonials" className="scroll-mt-4 overflow-hidden py-20" style={{ contentVisibility: "auto" }}>
-        <div className="mx-auto max-w-6xl px-5">
-          <h2 className="font-display text-3xl md:text-4xl">What participants say</h2>
-          <p className="mt-3 flex flex-wrap items-center gap-2 text-muted-foreground">
-            <Stars /> {GOOGLE_RATING} on Google from {GOOGLE_REVIEWS} reviews
-          </p>
-        </div>
-        <ReviewMarquee topic={topicKey} />
-      </section>
-
       {/* Why SPS */}
-      <section className="bg-card py-20" style={{ contentVisibility: "auto" }}>
+      <section className="py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-3xl px-5">
           <h2 className="font-display text-3xl md:text-4xl">Why choose SPS?</h2>
           <ul className="mt-8 space-y-4">
@@ -507,7 +507,7 @@ function Index() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20" style={{ contentVisibility: "auto" }}>
+      <section className="bg-card py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-3xl px-5">
           <h2 className="font-display text-3xl md:text-4xl">Frequently asked questions</h2>
           <Accordion type="single" collapsible className="mt-8">
