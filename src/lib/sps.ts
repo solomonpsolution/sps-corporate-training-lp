@@ -6,6 +6,18 @@ export const GOOGLE_ADS_ID = "AW-925863685";
 export const GOOGLE_ADS_LEAD_LABEL = "8SiyCMiNoLYdEIWevrkD"; // SPS NEW CT LP - FORM SUBMIT (primary)
 export const GOOGLE_ADS_WHATSAPP_LABEL = "qlVkCMuNoLYdEIWevrkD"; // SPS NEW CT LP - WHATSAPP CLICK (secondary)
 export const GOOGLE_ADS_PHONE_LABEL = "R-RcCM6NoLYdEIWevrkD"; // SPS NEW CT LP - PHONE CLICK (secondary)
+// Courses page (/corporate-training-lp/courses) has its own conversion actions.
+export const CERT_LEAD_LABEL = "v5FjCIiEnr8dEIWevrkD"; // SPS CERT LP - FORM SUBMIT
+export const CERT_WHATSAPP_LABEL = "B26pCIuEnr8dEIWevrkD"; // SPS CERT LP - WHATSAPP CLICK
+export const CERT_PHONE_LABEL = "SCv1CI6Enr8dEIWevrkD"; // SPS CERT LP - PHONE CLICK
+
+/** Conversion labels for the page the visitor is on. */
+export function pageLabels() {
+  const courses = typeof window !== "undefined" && window.location.pathname.includes("/courses");
+  return courses
+    ? { lead: CERT_LEAD_LABEL, whatsapp: CERT_WHATSAPP_LABEL, phone: CERT_PHONE_LABEL }
+    : { lead: GOOGLE_ADS_LEAD_LABEL, whatsapp: GOOGLE_ADS_WHATSAPP_LABEL, phone: GOOGLE_ADS_PHONE_LABEL };
+}
 export const CLARITY_ID = "zh0l06j1pj"; // Microsoft Clarity project "sps"
 
 // Leads are emailed to LEAD_EMAIL through FormSubmit (formsubmit.co), with a copy to LEAD_CC.
@@ -63,7 +75,7 @@ export function leadQuality(size: string): "qualified" | "standard" {
 }
 
 // ---- Tracking (browser only) ----
-export const TRACK_KEYS = ["gclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "topic"] as const;
+export const TRACK_KEYS = ["gclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "topic", "course"] as const;
 const COOKIE = "sps_attr";
 
 export function readAttribution(): Record<string, string> {
@@ -117,7 +129,7 @@ async function postLead(to: string, cc: string, lead: Record<string, string>) {
     // keepalive lets the request finish even if the visitor closes the tab.
     keepalive: true,
     body: JSON.stringify({
-      _subject: `New training lead: ${lead["company"] ?? ""} (${lead["lead_quality"] ?? ""})`,
+      _subject: lead["course"] ? `New course enquiry: ${lead["course"]} (${lead["full_name"] ?? ""})` : `New training lead: ${lead["company"] ?? ""} (${lead["lead_quality"] ?? ""})`,
       _template: "table",
       _captcha: "false",
       _cc: cc,

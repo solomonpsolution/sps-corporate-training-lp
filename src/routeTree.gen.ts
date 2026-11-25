@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BookRouteImport } from './routes/book'
+import { Route as CoursesRouteImport } from './routes/courses'
+import { Route as CoursesThankyouRouteImport } from './routes/courses-thankyou'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ThankyouRouteImport } from './routes/thankyou'
 
@@ -22,6 +24,16 @@ const IndexRoute = IndexRouteImport.update({
 const BookRoute = BookRouteImport.update({
   id: '/book',
   path: '/book',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoursesRoute = CoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoursesThankyouRoute = CoursesThankyouRouteImport.update({
+  id: '/courses-thankyou',
+  path: '/courses-thankyou',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -38,12 +50,16 @@ const ThankyouRoute = ThankyouRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/book': typeof BookRoute
+  '/courses': typeof CoursesRoute
+  '/courses-thankyou': typeof CoursesThankyouRoute
   '/privacy': typeof PrivacyRoute
   '/thankyou': typeof ThankyouRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/book': typeof BookRoute
+  '/courses': typeof CoursesRoute
+  '/courses-thankyou': typeof CoursesThankyouRoute
   '/privacy': typeof PrivacyRoute
   '/thankyou': typeof ThankyouRoute
 }
@@ -51,20 +67,33 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/book': typeof BookRoute
+  '/courses': typeof CoursesRoute
+  '/courses-thankyou': typeof CoursesThankyouRoute
   '/privacy': typeof PrivacyRoute
   '/thankyou': typeof ThankyouRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/book' | '/privacy' | '/thankyou'
+  fullPaths:
+    '/' | '/book' | '/courses' | '/courses-thankyou' | '/privacy' | '/thankyou'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/book' | '/privacy' | '/thankyou'
-  id: '__root__' | '/' | '/book' | '/privacy' | '/thankyou'
+  to:
+    '/' | '/book' | '/courses' | '/courses-thankyou' | '/privacy' | '/thankyou'
+  id:
+    | '__root__'
+    | '/'
+    | '/book'
+    | '/courses'
+    | '/courses-thankyou'
+    | '/privacy'
+    | '/thankyou'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BookRoute: typeof BookRoute
+  CoursesRoute: typeof CoursesRoute
+  CoursesThankyouRoute: typeof CoursesThankyouRoute
   PrivacyRoute: typeof PrivacyRoute
   ThankyouRoute: typeof ThankyouRoute
 }
@@ -83,6 +112,20 @@ declare module '@tanstack/react-router' {
       path: '/book'
       fullPath: '/book'
       preLoaderRoute: typeof BookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/courses': {
+      id: '/courses'
+      path: '/courses'
+      fullPath: '/courses'
+      preLoaderRoute: typeof CoursesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/courses-thankyou': {
+      id: '/courses-thankyou'
+      path: '/courses-thankyou'
+      fullPath: '/courses-thankyou'
+      preLoaderRoute: typeof CoursesThankyouRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -105,6 +148,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BookRoute: BookRoute,
+  CoursesRoute: CoursesRoute,
+  CoursesThankyouRoute: CoursesThankyouRoute,
   PrivacyRoute: PrivacyRoute,
   ThankyouRoute: ThankyouRoute,
 }

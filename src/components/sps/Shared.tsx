@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { GOOGLE_ADS_LEAD_LABEL, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABEL, PHONE_DISPLAY, PHONE_TEL, WHATSAPP_URL, adsConversion, pushEvent } from "@/lib/sps";
+import { PHONE_DISPLAY, PHONE_TEL, WHATSAPP_URL, adsConversion, pageLabels, pushEvent } from "@/lib/sps";
 
 export function Logo() {
   return (
@@ -33,7 +33,7 @@ export function WhatsAppButton({ floating = false }: { floating?: boolean }) {
       aria-label="Chat on WhatsApp"
       onClick={() => {
         pushEvent({ event: "whatsapp_click" });
-        adsConversion(GOOGLE_ADS_WHATSAPP_LABEL);
+        adsConversion(pageLabels().whatsapp);
       }}
       className={cls}
     >
@@ -47,7 +47,7 @@ export function PhoneLink({ className = "" }: { className?: string }) {
   return (
     <a href={PHONE_TEL} onClick={() => {
         pushEvent({ event: "phone_click" });
-        adsConversion(GOOGLE_ADS_PHONE_LABEL);
+        adsConversion(pageLabels().phone);
       }} className={className}>
       {PHONE_DISPLAY}
     </a>
@@ -69,7 +69,7 @@ export function useThankYouEvent() {
       training_topic: stored["training_topic"],
       company_size: stored["company_size"],
     });
-    adsConversion(GOOGLE_ADS_LEAD_LABEL);
+    adsConversion(pageLabels().lead);
   }, []);
 }
 
