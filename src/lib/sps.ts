@@ -28,8 +28,8 @@ export const LEAD_CC = "mercyget4@gmail.com";
 export const ZOHO_BOOKINGS_URL = "https://PLACEHOLDER-zoho-bookings-link"; // PLACEHOLDER
 export const WHATSAPP_NUMBER = "971552815948";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
-export const PHONE_DISPLAY = "+971 4 876 9263";
-export const PHONE_TEL = "tel:+97148769263";
+export const PHONE_DISPLAY = "+971 55 281 5948";
+export const PHONE_TEL = "tel:+971552815948";
 export const ADDRESS =
   "Office #51, 9th & 10th Floor, Crystal Tower, Millennium Central Downtown, Al Asayel St, Marasi Drive, Downtown Dubai, UAE";
 
