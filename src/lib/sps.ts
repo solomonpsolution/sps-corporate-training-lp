@@ -25,6 +25,7 @@ export const CLARITY_ID = "zh0l06j1pj"; // Microsoft Clarity project "sps"
 // Until it is activated, leads fall back to LEAD_CC (already active) so no enquiry is lost.
 export const LEAD_EMAIL = "info@solomonpeoplesolutions.com";
 export const LEAD_CC = "mercyget4@gmail.com";
+export const LEAD_CC_TEAM = "ayush@solomonpeoplesolutions.com"; // also copied on corporate leads
 export const ZOHO_BOOKINGS_URL = "https://PLACEHOLDER-zoho-bookings-link"; // PLACEHOLDER
 export const WHATSAPP_NUMBER = "971552815948";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -148,10 +149,10 @@ export async function sendLeadEmail(lead: Record<string, string>) {
     return;
   }
   try {
-    await postLead(LEAD_EMAIL, LEAD_CC, lead);
+    await postLead(LEAD_EMAIL, `${LEAD_CC},${LEAD_CC_TEAM}`, lead);
   } catch {
     // Main inbox not activated yet or temporarily failing: send to the backup inbox instead.
-    await postLead(LEAD_CC, LEAD_EMAIL, lead);
+    await postLead(LEAD_CC, `${LEAD_EMAIL},${LEAD_CC_TEAM}`, lead);
   }
 }
 
