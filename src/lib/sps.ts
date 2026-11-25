@@ -132,7 +132,7 @@ async function postLead(to: string, cc: string, lead: Record<string, string>) {
       _subject: lead["course"] ? `New course enquiry: ${lead["course"]} (${lead["full_name"] ?? ""})` : `New training lead: ${lead["company"] ?? ""} (${lead["lead_quality"] ?? ""})`,
       _template: "table",
       _captcha: "false",
-      _cc: cc,
+      ...(cc ? { _cc: cc } : {}),
       ...lead,
     }),
   });
@@ -141,6 +141,12 @@ async function postLead(to: string, cc: string, lead: Record<string, string>) {
 }
 
 export async function sendLeadEmail(lead: Record<string, string>) {
+  // TESTING: course enquiries go only to LEAD_CC until the courses page is approved.
+  // To send them to the client too, delete this if-block.
+  if (lead["course"]) {
+    await postLead(LEAD_CC, "", lead);
+    return;
+  }
   try {
     await postLead(LEAD_EMAIL, LEAD_CC, lead);
   } catch {
