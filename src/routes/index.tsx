@@ -18,12 +18,13 @@ const SLIDES = [
   ["SPS-3.webp", 593, 400],
 ] as const;
 
-// Figures published on the SPS founder page (solomonpeoplesolutions.com/founder).
+// Figures shown on the SPS main website (latest, confirmed by SPS).
 const NUMBERS = [
-  ["30+", "Years of experience"],
+  ["30+", "Years of professional experience"],
+  ["30+", "Countries served"],
+  ["350+", "Consulting and learning engagements"],
   ["5,000+", "Leaders and professionals developed"],
-  ["500+", "Consulting and learning engagements"],
-  ["15+", "Countries served"],
+  ["25+", "Industries"],
 ] as const;
 
 const CREDENTIALS = [
@@ -446,7 +447,7 @@ function Index() {
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
             Since 2006, SPS has helped organisations across the Middle East, Africa and Asia build stronger leaders and teams.
           </p>
-          <dl className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-4">
+          <dl className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-5">
             {NUMBERS.map(([n, label]) => (
               <div key={label} className="px-2">
                 <dt className="sr-only">{label}</dt>
