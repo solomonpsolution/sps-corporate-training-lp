@@ -52,7 +52,7 @@ const STEPS = [
 ] as const;
 
 const WHY = [
-  "20 years training professionals in the UAE (2006 to 2026)",
+  "30+ years of training experience, led by Solomon Vijayanand",
   "Rated 4.9 on Google from 462 reviews",
   "Online and classroom options",
   "Course outline and dates shared before you book",

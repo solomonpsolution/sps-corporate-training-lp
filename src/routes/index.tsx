@@ -63,7 +63,7 @@ const WHY = [
   "Full course outline and materials shared before you commit",
   "Confirmed dates and timely communication at every step",
   "Support for your team during and after the training",
-  "20 years training UAE teams (2006 to 2026)",
+  "30+ years of training experience, led by Solomon Vijayanand",
   "CPD accredited Train the Trainer and Certified Training Function Manager",
 ] as const;
 
