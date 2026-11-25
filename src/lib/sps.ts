@@ -25,7 +25,7 @@ export const CLARITY_ID = "zh0l06j1pj"; // Microsoft Clarity project "sps"
 // Until it is activated, leads fall back to LEAD_CC (already active) so no enquiry is lost.
 export const LEAD_EMAIL = "info@solomonpeoplesolutions.com";
 export const LEAD_CC = "mercyget4@gmail.com";
-export const LEAD_CC_TEAM = "ayush@solomonpeoplesolutions.com"; // also copied on corporate leads
+export const LEAD_CC_TEAM = "ayush@solomonpeoplesolutions.com"; // also copied on every lead (corporate and courses)
 export const ZOHO_BOOKINGS_URL = "https://PLACEHOLDER-zoho-bookings-link"; // PLACEHOLDER
 export const WHATSAPP_NUMBER = "971552815948";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -142,12 +142,6 @@ async function postLead(to: string, cc: string, lead: Record<string, string>) {
 }
 
 export async function sendLeadEmail(lead: Record<string, string>) {
-  // TESTING: course enquiries go only to LEAD_CC until the courses page is approved.
-  // To send them to the client too, delete this if-block.
-  if (lead["course"]) {
-    await postLead(LEAD_CC, "", lead);
-    return;
-  }
   try {
     await postLead(LEAD_EMAIL, `${LEAD_CC},${LEAD_CC_TEAM}`, lead);
   } catch {
