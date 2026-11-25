@@ -3,13 +3,15 @@ import { PHONE_DISPLAY, PHONE_TEL, WHATSAPP_URL, adsConversion, pageLabels, push
 
 export function Logo() {
   return (
-    <img
-      src="/corporate-training-lp/sps-logo.png"
-      alt="Solomon People Solutions"
-      width={159}
-      height={54}
-      className="h-8 w-auto md:h-10"
-    />
+    <a href="https://www.solomonpeoplesolutions.com/" aria-label="Solomon People Solutions home">
+      <img
+        src="/corporate-training-lp/sps-logo.png"
+        alt="Solomon People Solutions"
+        width={159}
+        height={54}
+        className="h-8 w-auto md:h-10"
+      />
+    </a>
   );
 }
 
