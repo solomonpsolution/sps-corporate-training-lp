@@ -465,7 +465,7 @@ function Courses() {
       </section>
 
       {/* Why SPS */}
-      <section className="bg-card py-20" style={{ contentVisibility: "auto" }}>
+      <section id="why" className="scroll-mt-20 bg-card py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-3xl px-5">
           <h2 className="font-display text-3xl md:text-4xl">Why choose SPS?</h2>
           <ul className="mt-8 space-y-4">
@@ -535,7 +535,7 @@ function Courses() {
       </section>
 
       {/* How we work */}
-      <section className="bg-card py-20" style={{ contentVisibility: "auto" }}>
+      <section id="steps" className="scroll-mt-20 bg-card py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-6xl px-5">
           <h2 className="font-display text-3xl md:text-4xl">How we work</h2>
           <p className="mt-3 max-w-2xl text-muted-foreground">From enquiry to your first session in four simple steps.</p>
@@ -552,7 +552,7 @@ function Courses() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20" style={{ contentVisibility: "auto" }}>
+      <section id="faq" className="scroll-mt-20 py-20" style={{ contentVisibility: "auto" }}>
         <div className="mx-auto max-w-3xl px-5">
           <h2 className="font-display text-3xl md:text-4xl">Frequently asked questions</h2>
           <Accordion type="single" collapsible className="mt-8">
