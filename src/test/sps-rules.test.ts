@@ -28,3 +28,18 @@ describe("ad source", () => {
     expect(adSource({ referrer: "direct" })).toBe("Not from an ad (came from: direct)");
   });
 });
+
+import { emailError, nameError } from "@/lib/sps";
+describe("junk lead checks", () => {
+  it("rejects junk names and emails, keeps real ones", () => {
+    expect(nameError("Hh")).not.toBe("");
+    expect(nameError("aaaa")).not.toBe("");
+    expect(nameError("Nahid Elias")).toBe("");
+    expect(nameError("Li")).toBe("");
+    expect(emailError("hhhh@gmail.vom")).not.toBe("");
+    expect(emailError("ali@gmial.com")).not.toBe("");
+    expect(emailError("Info@lawyerpoint.net")).toBe("");
+    expect(emailError("sara@company.om")).toBe("");
+    expect(emailError("hr@firm.co.uk")).toBe("");
+  });
+});

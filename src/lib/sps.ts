@@ -65,6 +65,28 @@ export function headlineFor(topic: string | null | undefined) {
   return (topic && HEADLINES[topic.toLowerCase()]) || DEFAULT_HEADLINE;
 }
 
+/** Real-looking name: at least 2 letters, and not one letter repeated ("Hh", "aaaa"). */
+export function nameError(name: string): string {
+  const letters = name.toLowerCase().replace(/[^\p{L}]/gu, "");
+  if (letters.length < 2) return "Please enter your full name";
+  if (new Set(letters).size < 2) return "Please enter your real name";
+  return "";
+}
+
+// Common misspellings of real email endings, e.g. gmail.vom or yahoo.con.
+const BAD_TLDS = ["vom", "con", "cpm", "xom", "cim", "comm", "nett", "ner"];
+const BAD_DOMAINS = ["gmial.com", "gmai.com", "gamil.com", "gnail.com", "gmail.co", "hotmial.com", "hotmal.com", "yaho.com", "outlok.com"];
+
+export function emailError(email: string): string {
+  const e = email.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(e)) return "Please enter a valid email";
+  const [user = "", domain = ""] = e.split("@");
+  const tld = domain.split(".").pop() ?? "";
+  if (BAD_TLDS.includes(tld) || BAD_DOMAINS.includes(domain)) return "Please check your email address";
+  if (new Set(user.replace(/[^a-z0-9]/g, "")).size < 2) return "Please check your email address";
+  return "";
+}
+
 export function isValidUaePhone(phone: string) {
   const d = phone.replace(/[\s\-()]/g, "");
   return /^(\+971|00971|0)?(5\d{8}|[2-9]\d{7})$/.test(d);

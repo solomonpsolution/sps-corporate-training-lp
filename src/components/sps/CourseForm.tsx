@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { COURSE_OPTIONS } from "@/lib/courses";
-import { adSource, isValidUaePhone, PHONE_DISPLAY, pushEvent, readAttribution, sendLeadEmail } from "@/lib/sps";
+import { adSource, emailError, nameError, isValidUaePhone, PHONE_DISPLAY, pushEvent, readAttribution, sendLeadEmail } from "@/lib/sps";
 
 const empty = { full_name: "", email: "", phone: "+971 ", course: "" };
 type Values = typeof empty;
@@ -27,7 +27,8 @@ export function CourseForm({ course, id = "enquiry-form" }: { course: string; id
   function validate() {
     const e: typeof errors = {};
     for (const k of ["full_name", "email", "phone", "course"] as const) if (!v[k].trim() || v[k].trim() === "+971") e[k] = "Required";
-    if (!e.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) e.email = "Please enter a valid email";
+    if (!e.full_name && nameError(v.full_name)) e.full_name = nameError(v.full_name);
+    if (!e.email && emailError(v.email)) e.email = emailError(v.email);
     if (!e.phone && !isValidUaePhone(v.phone)) e.phone = "Please enter a valid UAE number, e.g. +971 50 123 4567";
     setErrors(e);
     return Object.keys(e).length === 0;

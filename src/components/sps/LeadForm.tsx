@@ -4,6 +4,8 @@ import {
   COMPANY_SIZES,
   TOPIC_OPTIONS,
   adSource,
+  emailError,
+  nameError,
   isValidUaePhone,
   PHONE_DISPLAY,
   leadQuality,
@@ -45,9 +47,8 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
     const e: typeof errors = {};
     const req: (keyof Values)[] = ["full_name", "work_email", "phone", "company", "company_size", "training_topic"];
     for (const k of req) if (!v[k].trim() || v[k].trim() === "+971") e[k] = "Required";
-    if (!e.work_email) {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.work_email.trim())) e.work_email = "Please enter a valid email";
-    }
+    if (!e.full_name && nameError(v.full_name)) e.full_name = nameError(v.full_name);
+    if (!e.work_email && emailError(v.work_email)) e.work_email = emailError(v.work_email);
     if (!e.phone && !isValidUaePhone(v.phone)) e.phone = "Please enter a valid UAE number, e.g. +971 50 123 4567";
     setErrors(e);
     return Object.keys(e).length === 0;
