@@ -190,3 +190,21 @@ export const noindexMeta = [
   { property: "og:type", content: "website" },
   { name: "twitter:card", content: "summary" },
 ];
+
+/**
+ * Enhanced conversions: give the Google tag the lead's email and phone before the
+ * conversion fires. The tag hashes them (SHA-256) in the browser; Google never gets
+ * them in plain text. Helps match conversions that cookies miss (e.g. iPhones).
+ */
+export function setEnhancedUserData(email: unknown, phone: unknown) {
+  if (typeof window === "undefined") return;
+  const w = window as unknown as { gtag?: (...a: unknown[]) => void };
+  const data: Record<string, string> = {};
+  if (typeof email === "string" && email) data["email"] = email.trim().toLowerCase();
+  if (typeof phone === "string") {
+    const d = phone.replace(/[^\d+]/g, "").replace(/^00/, "+");
+    const e164 = d.startsWith("+") ? d : d.startsWith("0") ? "+971" + d.slice(1) : "+971" + d;
+    if (e164.length >= 11) data["phone_number"] = e164;
+  }
+  if (Object.keys(data).length) w.gtag?.("set", "user_data", data);
+}

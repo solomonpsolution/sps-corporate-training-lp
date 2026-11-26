@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { PHONE_DISPLAY, PHONE_TEL, WHATSAPP_URL, adsConversion, pageLabels, pushEvent } from "@/lib/sps";
+import { PHONE_DISPLAY, PHONE_TEL, WHATSAPP_URL, adsConversion, pageLabels, pushEvent, setEnhancedUserData } from "@/lib/sps";
 
 export function Logo() {
   return (
@@ -71,6 +71,7 @@ export function useThankYouEvent() {
       training_topic: stored["training_topic"],
       company_size: stored["company_size"],
     });
+    setEnhancedUserData(stored["email"], stored["phone"]);
     adsConversion(pageLabels().lead);
   }, []);
 }

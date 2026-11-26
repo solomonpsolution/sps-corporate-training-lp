@@ -78,7 +78,7 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
     try {
       await Promise.race([sending, slow]);
       pushEvent({ event: "generate_lead", lead_quality: quality, training_topic: v.training_topic, company_size: v.company_size });
-      sessionStorage.setItem("sps_lead", JSON.stringify({ training_topic: v.training_topic, company_size: v.company_size, lead_quality: quality }));
+      sessionStorage.setItem("sps_lead", JSON.stringify({ training_topic: v.training_topic, company_size: v.company_size, lead_quality: quality, email: v.work_email.trim(), phone: v.phone }));
       navigate({ to: "/thankyou" });
     } catch {
       setSubmitError(`Sorry, we couldn't send your request. Please try again, or call us on ${PHONE_DISPLAY}. Your details are still here.`);

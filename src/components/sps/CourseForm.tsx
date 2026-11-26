@@ -53,7 +53,7 @@ export function CourseForm({ course, id = "enquiry-form" }: { course: string; id
     try {
       await Promise.race([sending, slow]);
       pushEvent({ event: "generate_lead", course: v.course });
-      sessionStorage.setItem("sps_lead", JSON.stringify({ training_topic: v.course }));
+      sessionStorage.setItem("sps_lead", JSON.stringify({ training_topic: v.course, email: v.email.trim(), phone: v.phone }));
       navigate({ to: "/courses-thankyou" });
     } catch {
       setSubmitError(`Sorry, we couldn't send your enquiry. Please try again, or call us on ${PHONE_DISPLAY}. Your details are still here.`);
