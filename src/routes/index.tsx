@@ -249,8 +249,11 @@ function ReviewMarquee({ topic }: { topic: string }) {
     let raf = 0;
     let last = performance.now();
     let pos = el.scrollLeft;
+    // Measure the row once (and on resize), not on every frame.
+    let half = el.scrollWidth / 2;
+    const onResize = () => (half = el.scrollWidth / 2);
+    window.addEventListener("resize", onResize);
     const tick = (t: number) => {
-      const half = el.scrollWidth / 2;
       if (half > 0) {
         if (!paused.current && !reduce) {
           pos += ((t - last) / 1000) * (half / 280);
@@ -265,8 +268,20 @@ function ReviewMarquee({ topic }: { topic: string }) {
       last = t;
       raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    // Only animate while the reviews are on screen, so taps elsewhere stay instant.
+    const obs = new IntersectionObserver(([entry]) => {
+      cancelAnimationFrame(raf);
+      if (entry?.isIntersecting) {
+        last = performance.now();
+        raf = requestAnimationFrame(tick);
+      }
+    });
+    obs.observe(el);
+    return () => {
+      obs.disconnect();
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   const pause = () => {
