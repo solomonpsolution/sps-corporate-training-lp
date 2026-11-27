@@ -331,6 +331,7 @@ function Courses() {
   const topicKey = current?.key ?? "";
   const [topic, setTopic] = useState(current?.name ?? "");
   const [open, setOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     captureAttribution();
@@ -467,16 +468,21 @@ function Courses() {
         </div>
       </section>
 
-      {/* Mid-page call to action, for visitors ready to enquire before the bottom form */}
-      <section className="bg-[oklch(0.18_0.03_262)] py-14 text-white">
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-5 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="font-display text-2xl md:text-3xl">Get the next batch dates and course outline</h2>
-            <p className="mt-2 max-w-xl text-white/80">Send an enquiry and we'll share the dates, timings and format within minutes during working hours.</p>
+      {/* Form high on the page: Clarity showed mobile visitors rarely scroll past 35% */}
+      <section id="contact" className="scroll-mt-20 bg-[oklch(0.18_0.03_262)] py-20">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-[1fr_1fr]">
+          <div className="text-white">
+            <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
+              <span className="h-px w-8 bg-highlight" />
+              Contact us
+            </p>
+            <h2 className="mt-4 font-display text-3xl leading-tight md:text-5xl">Ask about the next batch.</h2>
+            <p className="mt-5 text-lg text-white/80">Tell us the course you want. We reply with dates, timings and format within minutes during working hours.</p>
+            <p className="mt-6 text-white/80">
+              Prefer to talk? Call <PhoneLink className="font-semibold text-white underline" />
+            </p>
           </div>
-          <button onClick={() => openForm()} className="shrink-0 rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90">
-            Enquire now
-          </button>
+          <CourseForm course={topic} />
         </div>
       </section>
 
@@ -500,7 +506,7 @@ function Courses() {
         <h2 className="font-display text-3xl md:text-4xl">Our courses</h2>
         <p className="mt-3 max-w-2xl text-muted-foreground">Online or classroom options. Ask us for the next batch dates.</p>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {[...(current ? [current] : []), ...COURSES.filter((c) => c !== current)].map((c) => (
+          {(current && !showAll ? [current] : [...(current ? [current] : []), ...COURSES.filter((c) => c !== current)]).map((c) => (
             <article key={c.key} className="flex flex-col rounded-2xl border border-border bg-card p-7">
               <h3 className="font-display text-xl">{c.name}</h3>
               {c.badge && <p className="mt-1 text-sm font-semibold text-primary">{c.badge}</p>}
@@ -518,6 +524,11 @@ function Courses() {
             </article>
           ))}
         </div>
+        {current && !showAll && (
+          <button onClick={() => setShowAll(true)} className="mt-6 rounded-full border-2 border-primary px-6 py-2.5 font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground">
+            See all {COURSES.length} courses
+          </button>
+        )}
       </section>
 
       {/* Founder credibility */}
@@ -582,21 +593,16 @@ function Courses() {
         </div>
       </section>
 
-      {/* Final section with the form on the page */}
-      <section id="contact" className="scroll-mt-20 bg-[oklch(0.18_0.03_262)] py-20">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-[1fr_1fr]">
-          <div className="text-white">
-            <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
-              <span className="h-px w-8 bg-highlight" />
-              Contact us
-            </p>
-            <h2 className="mt-4 font-display text-3xl leading-tight md:text-5xl">Ask about the next batch.</h2>
-            <p className="mt-5 text-lg text-white/80">Tell us the course you want. We reply with dates, timings and format within minutes during working hours.</p>
-            <p className="mt-6 text-white/80">
-              Prefer to talk? Call <PhoneLink className="font-semibold text-white underline" />
-            </p>
+      {/* Closing call to action for visitors who read to the end */}
+      <section className="bg-[oklch(0.18_0.03_262)] py-14 text-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="font-display text-2xl md:text-3xl">Get the next batch dates and course outline</h2>
+            <p className="mt-2 max-w-xl text-white/80">Send an enquiry and we'll share the dates, timings and format within minutes during working hours.</p>
           </div>
-          <CourseForm course={topic} />
+          <button onClick={() => openForm()} className="shrink-0 rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90">
+            Enquire now
+          </button>
         </div>
       </section>
 

@@ -476,16 +476,21 @@ function Index() {
         </div>
       </section>
 
-      {/* Mid-page call to action, for visitors ready to enquire before the bottom form */}
-      <section className="bg-[oklch(0.18_0.03_262)] py-14 text-white">
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-5 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="font-display text-2xl md:text-3xl">Get a training proposal in 1 working day</h2>
-            <p className="mt-2 max-w-xl text-white/80">Tell us about your team and goals. We'll send a programme outline built around them.</p>
+      {/* Form high on the page: Clarity showed mobile visitors rarely scroll past 35% */}
+      <section id="contact" className="scroll-mt-20 bg-[oklch(0.18_0.03_262)] py-20">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-[1fr_1fr]">
+          <div className="text-white">
+            <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
+              <span className="h-px w-8 bg-highlight" />
+              Contact us
+            </p>
+            <h2 className="mt-4 font-display text-3xl leading-tight md:text-5xl">Tell us what your team needs.</h2>
+            <p className="mt-5 text-lg text-white/80">We design a training programme built around your goals and reply within minutes during working hours.</p>
+            <p className="mt-6 text-white/80">
+              Prefer to talk? Call <PhoneLink className="font-semibold text-white underline" />
+            </p>
           </div>
-          <button onClick={() => openForm()} className="shrink-0 rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90">
-            Get proposal
-          </button>
+          <LeadForm topic={topic} />
         </div>
       </section>
 
@@ -590,21 +595,16 @@ function Index() {
         </div>
       </section>
 
-      {/* Final section with the form on the page */}
-      <section id="contact" className="scroll-mt-20 bg-[oklch(0.18_0.03_262)] py-20">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-[1fr_1fr]">
-          <div className="text-white">
-            <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
-              <span className="h-px w-8 bg-highlight" />
-              Contact us
-            </p>
-            <h2 className="mt-4 font-display text-3xl leading-tight md:text-5xl">Tell us what your team needs.</h2>
-            <p className="mt-5 text-lg text-white/80">We design a training programme built around your goals and reply within minutes during working hours.</p>
-            <p className="mt-6 text-white/80">
-              Prefer to talk? Call <PhoneLink className="font-semibold text-white underline" />
-            </p>
+      {/* Closing call to action for visitors who read to the end */}
+      <section className="bg-[oklch(0.18_0.03_262)] py-14 text-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="font-display text-2xl md:text-3xl">Get a training proposal in 1 working day</h2>
+            <p className="mt-2 max-w-xl text-white/80">Tell us about your team and goals. We'll send a programme outline built around them.</p>
           </div>
-          <LeadForm topic={topic} />
+          <button onClick={() => openForm()} className="shrink-0 rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:bg-primary/90">
+            Get proposal
+          </button>
         </div>
       </section>
 
