@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { COURSE_OPTIONS } from "@/lib/courses";
-import { adSource, emailError, nameError, isValidUaePhone, PHONE_DISPLAY, pushEvent, readAttribution, sendLeadEmail } from "@/lib/sps";
+import { adSource, clarityEvent, emailError, nameError, isValidUaePhone, PHONE_DISPLAY, pushEvent, readAttribution, sendLeadEmail } from "@/lib/sps";
 
 const empty = { full_name: "", email: "", phone: "+971 ", course: "" };
 type Values = typeof empty;
@@ -22,7 +22,11 @@ export function CourseForm({ course, id = "enquiry-form" }: { course: string; id
     if (course) setV((p) => ({ ...p, course }));
   }, [course]);
 
-  const set = (k: keyof Values) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setV((p) => ({ ...p, [k]: e.target.value }));
+  const set = (k: keyof Values) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setV((p) => ({ ...p, [k]: e.target.value }));
+    setErrors((p) => ({ ...p, [k]: undefined }));
+    setSubmitError("");
+  };
 
   function validate() {
     const e: typeof errors = {};
@@ -31,12 +35,18 @@ export function CourseForm({ course, id = "enquiry-form" }: { course: string; id
     if (!e.email && emailError(v.email)) e.email = emailError(v.email);
     if (!e.phone && !isValidUaePhone(v.phone)) e.phone = "Please enter a valid UAE number, e.g. +971 50 123 4567";
     setErrors(e);
-    return Object.keys(e).length === 0;
+    const bad = Object.keys(e);
+    if (bad.length) {
+      setSubmitError(bad.length === 1 ? "Please fix the highlighted field above." : "Please fix the highlighted fields above.");
+      for (const k of bad) clarityEvent(`form_error_${k}`);
+    }
+    return bad.length === 0;
   }
 
   async function onSubmit(ev: React.FormEvent) {
     ev.preventDefault();
     setSubmitError("");
+    clarityEvent("form_submit_click");
     if (!validate()) return;
     setLoading(true);
     const attr = readAttribution();

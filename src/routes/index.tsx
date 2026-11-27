@@ -6,7 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { LeadForm } from "@/components/sps/LeadForm";
 import { Logo, PhoneLink, WhatsAppButton, WhatsAppIcon } from "@/components/sps/Shared";
 import { REVIEWS, type Review } from "@/lib/reviews";
-import { ADDRESS, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABEL, PHONE_TEL, TOPICS, URL_TOPIC_TO_FORM, WHATSAPP_URL, adsConversion, captureAttribution, headlineFor, noindexMeta, pushEvent } from "@/lib/sps";
+import { ADDRESS, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABEL, PHONE_TEL, TOPICS, URL_TOPIC_TO_FORM, WHATSAPP_TEXT_CORPORATE, whatsappHref, adsConversion, captureAttribution, headlineFor, noindexMeta, pushEvent } from "@/lib/sps";
 
 const GOOGLE_RATING = "4.9";
 const GOOGLE_REVIEWS = "462";
@@ -401,7 +401,7 @@ function Index() {
               Request a proposal
             </button>
             <a
-              href={WHATSAPP_URL}
+              href={whatsappHref(WHATSAPP_TEXT_CORPORATE)}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => {

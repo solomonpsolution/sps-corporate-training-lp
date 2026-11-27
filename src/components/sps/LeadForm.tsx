@@ -4,6 +4,7 @@ import {
   COMPANY_SIZES,
   TOPIC_OPTIONS,
   adSource,
+  clarityEvent,
   emailError,
   nameError,
   isValidUaePhone,
@@ -40,8 +41,11 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
     if (topic) setV((p) => ({ ...p, training_topic: topic }));
   }, [topic]);
 
-  const set = (k: keyof Values) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+  const set = (k: keyof Values) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setV((p) => ({ ...p, [k]: e.target.value }));
+    setErrors((p) => ({ ...p, [k]: undefined }));
+    setSubmitError("");
+  };
 
   function validate() {
     const e: typeof errors = {};
@@ -51,12 +55,18 @@ export function LeadForm({ topic, id = "proposal-form" }: { topic: string; id?: 
     if (!e.work_email && emailError(v.work_email)) e.work_email = emailError(v.work_email);
     if (!e.phone && !isValidUaePhone(v.phone)) e.phone = "Please enter a valid UAE number, e.g. +971 50 123 4567";
     setErrors(e);
-    return Object.keys(e).length === 0;
+    const bad = Object.keys(e);
+    if (bad.length) {
+      setSubmitError(bad.length === 1 ? "Please fix the highlighted field above." : "Please fix the highlighted fields above.");
+      for (const k of bad) clarityEvent(`form_error_${k}`);
+    }
+    return bad.length === 0;
   }
 
   async function onSubmit(ev: React.FormEvent) {
     ev.preventDefault();
     setSubmitError("");
+    clarityEvent("form_submit_click");
     if (!validate()) return;
     setLoading(true);
     const quality = leadQuality(v.company_size);

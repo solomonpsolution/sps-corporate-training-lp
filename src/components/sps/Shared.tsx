@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { PHONE_DISPLAY, PHONE_TEL, WHATSAPP_URL, adsConversion, pageLabels, pushEvent, setEnhancedUserData } from "@/lib/sps";
+import { COURSES } from "@/lib/courses";
+import { PHONE_DISPLAY, PHONE_TEL, WHATSAPP_TEXT_CORPORATE, WHATSAPP_URL, whatsappHref, whatsappTextForCourse, adsConversion, pageLabels, pushEvent, setEnhancedUserData } from "@/lib/sps";
 
 export function Logo() {
   return (
@@ -33,7 +34,12 @@ export function WhatsAppButton({ floating = false }: { floating?: boolean }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
-      onClick={() => {
+      onClick={(ev) => {
+        // Pick the pre-filled message for the page the visitor is on.
+        const path = window.location.pathname;
+        const key = new URLSearchParams(window.location.search).get("course") ?? "";
+        const name = COURSES.find((c) => c.key === key.toLowerCase())?.name;
+        ev.currentTarget.href = whatsappHref(path.includes("/courses") ? whatsappTextForCourse(name) : WHATSAPP_TEXT_CORPORATE);
         pushEvent({ event: "whatsapp_click" });
         adsConversion(pageLabels().whatsapp);
       }}

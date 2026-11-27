@@ -7,7 +7,7 @@ import { CourseForm } from "@/components/sps/CourseForm";
 import { COURSES, DEFAULT_COURSE_HEADLINE, courseFor } from "@/lib/courses";
 import { Logo, PhoneLink, WhatsAppButton, WhatsAppIcon } from "@/components/sps/Shared";
 import { REVIEWS, type Review } from "@/lib/reviews";
-import { ADDRESS, CERT_PHONE_LABEL, CERT_WHATSAPP_LABEL, PHONE_TEL, WHATSAPP_URL, adsConversion, captureAttribution, noindexMeta, pushEvent } from "@/lib/sps";
+import { ADDRESS, CERT_PHONE_LABEL, CERT_WHATSAPP_LABEL, PHONE_TEL, whatsappHref, whatsappTextForCourse, adsConversion, captureAttribution, noindexMeta, pushEvent } from "@/lib/sps";
 
 const GOOGLE_RATING = "4.9";
 const GOOGLE_REVIEWS = "462";
@@ -392,7 +392,7 @@ function Courses() {
               Get course details
             </button>
             <a
-              href={WHATSAPP_URL}
+              href={whatsappHref(whatsappTextForCourse(current?.name))}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => {

@@ -208,3 +208,19 @@ export function setEnhancedUserData(email: unknown, phone: unknown) {
   }
   if (Object.keys(data).length) w.gtag?.("set", "user_data", data);
 }
+
+/** WhatsApp link with a pre-filled first message. */
+export function whatsappHref(text: string) {
+  return `${WHATSAPP_URL}?text=${encodeURIComponent(text)}`;
+}
+export const WHATSAPP_TEXT_CORPORATE = "Hi, I'd like a training proposal for my team.";
+export function whatsappTextForCourse(courseName?: string) {
+  return courseName ? `Hi, I'd like the ${courseName} course details and next batch dates.` : "Hi, I'd like details about your courses.";
+}
+
+/** Sends a named event to Microsoft Clarity (shows under Filters > Custom events). */
+export function clarityEvent(name: string) {
+  if (typeof window === "undefined") return;
+  const w = window as unknown as { clarity?: (...a: unknown[]) => void };
+  w.clarity?.("event", name);
+}
