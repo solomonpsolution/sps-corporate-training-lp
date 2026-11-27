@@ -473,7 +473,6 @@ function Courses() {
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-[1fr_1fr]">
           <div className="text-white">
             <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
-              <span className="h-px w-8 bg-highlight" />
               Contact us
             </p>
             <h2 className="mt-4 font-display text-3xl leading-tight md:text-5xl">Ask about the next batch.</h2>
@@ -506,8 +505,14 @@ function Courses() {
         <h2 className="font-display text-3xl md:text-4xl">Our courses</h2>
         <p className="mt-3 max-w-2xl text-muted-foreground">Online or classroom options. Ask us for the next batch dates.</p>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {(current && !showAll ? [current] : [...(current ? [current] : []), ...COURSES.filter((c) => c !== current)]).map((c) => (
-            <article key={c.key} className="flex flex-col rounded-2xl border border-border bg-card p-7">
+          {/* Phone: only the searched course until "See all". Desktop: the first 6. */}
+          {[...(current ? [current] : []), ...COURSES.filter((c) => c !== current)].map((c, i) => (
+            <article
+              key={c.key}
+              className={`flex-col rounded-2xl border border-border bg-card p-7 ${
+                showAll || !current || i === 0 ? "flex" : i < 6 ? "hidden md:flex" : "hidden"
+              }`}
+            >
               <h3 className="font-display text-xl">{c.name}</h3>
               {c.badge && <p className="mt-1 text-sm font-semibold text-primary">{c.badge}</p>}
               <ul className="mt-4 flex-1 space-y-2 text-muted-foreground">

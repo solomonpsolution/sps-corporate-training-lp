@@ -481,7 +481,6 @@ function Index() {
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-[1fr_1fr]">
           <div className="text-white">
             <p className="flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-highlight">
-              <span className="h-px w-8 bg-highlight" />
               Contact us
             </p>
             <h2 className="mt-4 font-display text-3xl leading-tight md:text-5xl">Tell us what your team needs.</h2>
