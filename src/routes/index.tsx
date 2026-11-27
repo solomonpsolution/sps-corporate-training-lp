@@ -9,7 +9,7 @@ import { REVIEWS, type Review } from "@/lib/reviews";
 import { ADDRESS, GOOGLE_ADS_PHONE_LABEL, GOOGLE_ADS_WHATSAPP_LABEL, PHONE_TEL, TOPICS, URL_TOPIC_TO_FORM, WHATSAPP_TEXT_CORPORATE, whatsappHref, adsConversion, captureAttribution, headlineFor, noindexMeta, pushEvent } from "@/lib/sps";
 
 const GOOGLE_RATING = "4.9";
-const GOOGLE_REVIEWS = "462";
+const GOOGLE_REVIEWS = "476";
 // WebP versions of the hero photos (about 30-40 KB each instead of ~120 KB PNG).
 // [file, width, height]
 const SLIDES = [

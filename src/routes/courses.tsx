@@ -10,7 +10,7 @@ import { REVIEWS, type Review } from "@/lib/reviews";
 import { ADDRESS, CERT_PHONE_LABEL, CERT_WHATSAPP_LABEL, PHONE_TEL, whatsappHref, whatsappTextForCourse, adsConversion, captureAttribution, noindexMeta, pushEvent } from "@/lib/sps";
 
 const GOOGLE_RATING = "4.9";
-const GOOGLE_REVIEWS = "462";
+const GOOGLE_REVIEWS = "476";
 // WebP versions of the hero photos (about 30-40 KB each instead of ~120 KB PNG).
 // [file, width, height]
 const SLIDES = [
@@ -53,7 +53,7 @@ const STEPS = [
 
 const WHY = [
   "30+ years of training experience, led by Solomon Vijayanand",
-  "Rated 4.9 on Google from 462 reviews",
+  "Rated 4.9 on Google from 476 reviews",
   "Online and classroom options",
   "Course outline and dates shared before you book",
   "Support from enquiry to exam day",
